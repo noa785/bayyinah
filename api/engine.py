@@ -125,7 +125,9 @@ class HadithEngine:
                 "graded_by": h.get("graded_by"),
                 "source": h.get("source") or {"book": None, "ref": None},
                 "url": h.get("url"),
-                "note": h.get("note") or (f"الراوي: {h['narrator']}" if h.get("narrator") else None),
+                "note": h.get("note"),
+                "narrator": h.get("narrator") or None,
+                "takhrij": h.get("takhrij") or None,
                 "alternative": (
                     {
                         "text": alt["text"],

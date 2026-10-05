@@ -1,1209 +1,602 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <title>بينة</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --pg: #d9cdb4;
-        --bg: #f1e8d7;
-        --bg2: #e7dac1;
-        --navy: #13264a;
-        --navy2: #1e3a6e;
-        --gold: #c49a3f;
-        --gold2: #e6cc8e;
-        --green: #2c9a68;
-        --gbg: #e3f3ea;
-        --red: #b64545;
-        --rbg: #f8e4e2;
-        --amb: #b8862b;
-        --abg: #f6ebcf;
-        --ink: #1b2335;
-        --mute: #666b78;
-        --card: rgba(255, 255, 255, 0.74);
-        --sh: 0 10px 28px rgba(19, 38, 74, 0.12);
-        box-sizing: border-box;
-        padding-top: env(safe-area-inset-top, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-      }
-      :root:not([data-theme="light"]) {
-      }
-      @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-          --pg: #171a22;
-        }
-      }
-      :root[data-theme="dark"] {
-        --pg: #171a22;
-      }
-      html {
-        scroll-padding-top: env(safe-area-inset-top, 0px);
-        height: 100%;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        -webkit-tap-highlight-color: transparent;
-      }
-      body {
-        height: 100%;
-        background: var(--pg);
-        font-family: "IBM Plex Sans Arabic", Tahoma, sans-serif;
-        color: var(--ink);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #app {
-        width: 100%;
-        max-width: 420px;
-        height: 100%;
-        max-height: 860px;
-        background: var(--bg);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-      @media (min-width: 500px) {
-        #app {
-          height: min(860px, 96%);
-          border-radius: 38px;
-          box-shadow: 0 30px 70px rgba(10, 15, 30, 0.35);
-        }
-      }
-      #scr {
-        flex: 1;
-        overflow-y: auto;
-        padding: 18px 20px 22px;
-        display: flex;
-        flex-direction: column;
-        animation: in 0.35s ease;
-      }
-      @keyframes in {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-      }
-      .moq {
-        position: absolute;
-        inset: auto 0 0;
-        opacity: 0.1;
-        pointer-events: none;
-      }
-      .z {
-        position: relative;
-        z-index: 1;
-      }
-      .card {
-        background: var(--card);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border: 1px solid rgba(255, 255, 255, 0.85);
-        border-radius: 20px;
-        box-shadow: var(--sh);
-        padding: 14px;
-      }
-      .btn {
-        display: block;
-        width: 100%;
-        border: 0;
-        font: 700 16px inherit;
-        font-family: inherit;
-        color: #fff;
-        background: linear-gradient(160deg, var(--navy2), var(--navy));
-        border-radius: 18px;
-        padding: 15px;
-        border-bottom: 2px solid var(--gold);
-        box-shadow: 0 10px 22px rgba(19, 38, 74, 0.3);
-        cursor: pointer;
-        text-align: center;
-      }
-      .btn.alt {
-        background: var(--card);
-        color: var(--navy);
-        box-shadow: var(--sh);
-        border: 1px solid var(--gold);
-      }
-      .btn:disabled {
-        opacity: 0.5;
-      }
-      .btn:focus-visible,
-      .tab:focus-visible,
-      .hd button:focus-visible,
-      .acc:focus-visible {
-        outline: 3px solid var(--gold);
-        outline-offset: 2px;
-      }
-      h1,
-      h2,
-      h3,
-      h4 {
-        color: var(--navy);
-      }
-      .logo {
-        text-align: center;
-      }
-      .logo b {
-        display: block;
-        font:
-          700 46px/1.1 "Reem Kufi",
-          serif;
-        color: var(--navy);
-      }
-      .logo small {
-        color: var(--gold);
-        letter-spacing: 3px;
-        font-size: 10px;
-        direction: ltr;
-        display: block;
-      }
-      .sub {
-        font-size: 13.5px;
-        line-height: 1.9;
-        color: var(--mute);
-        text-align: center;
-      }
-      .hd {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-      .hd h4 {
-        font-size: 19px;
-        flex: 1;
-      }
-      .hd button {
-        width: 36px;
-        height: 36px;
-        border-radius: 12px;
-        border: 0;
-        background: var(--card);
-        box-shadow: var(--sh);
-        color: var(--navy);
-        font-size: 18px;
-        cursor: pointer;
-      }
-      .tabs {
-        display: flex;
-        background: rgba(19, 38, 74, 0.07);
-        border-radius: 16px;
-        padding: 4px;
-        margin-bottom: 12px;
-      }
-      .tab {
-        flex: 1;
-        border: 0;
-        background: none;
-        font: 600 13px inherit;
-        font-family: inherit;
-        padding: 9px 2px;
-        border-radius: 12px;
-        color: var(--mute);
-        cursor: pointer;
-      }
-      .tab.on {
-        background: var(--navy);
-        color: #fff;
-      }
-      .up {
-        border: 2px dashed var(--gold);
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.55);
-        text-align: center;
-        padding: 22px 12px;
-        cursor: pointer;
-        display: block;
-      }
-      .up .cl {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(160deg, var(--navy2), var(--navy));
-        margin: 0 auto 8px;
-        display: grid;
-        place-items: center;
-        color: var(--gold2);
-        font-size: 24px;
-      }
-      .chips {
-        display: flex;
-        gap: 6px;
-        justify-content: center;
-        margin-top: 10px;
-        direction: ltr;
-        flex-wrap: wrap;
-      }
-      .chips span {
-        font-size: 10px;
-        font-weight: 600;
-        padding: 4px 9px;
-        border-radius: 99px;
-        background: var(--bg2);
-        color: var(--navy);
-      }
-      textarea,
-      input[type="url"] {
-        width: 100%;
-        border: 1px solid rgba(19, 38, 74, 0.15);
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 14px;
-        padding: 12px;
-        font: 14px/1.7 inherit;
-        font-family: inherit;
-        color: var(--ink);
-        resize: none;
-      }
-      textarea:focus,
-      input:focus {
-        outline: 2px solid var(--gold);
-      }
-      label.l {
-        display: block;
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--navy);
-        margin: 12px 0 6px;
-      }
-      .err {
-        background: var(--rbg);
-        color: var(--red);
-        border-radius: 14px;
-        padding: 10px 12px;
-        font-size: 13px;
-        margin-top: 10px;
-        line-height: 1.7;
-      }
-      .how {
-        display: flex;
-        gap: 8px;
-        margin-top: auto;
-      }
-      .how .card {
-        flex: 1;
-        text-align: center;
-        padding: 10px 4px;
-        font-size: 11.5px;
-        font-weight: 600;
-        color: var(--navy);
-      }
-      .how i {
-        display: grid;
-        place-items: center;
-        width: 34px;
-        height: 34px;
-        margin: 0 auto 6px;
-        border-radius: 50%;
-        background: var(--navy);
-        font-style: normal;
-        position: relative;
-      }
-      .how em {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background: var(--gold);
-        color: #fff;
-        font: 700 9px/15px inherit;
-        font-style: normal;
-      }
-      .ring {
-        width: 96px;
-        height: 96px;
-        margin: 4px auto 8px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-      }
-      .ring div {
-        width: 76px;
-        height: 76px;
-        border-radius: 50%;
-        background: var(--bg);
-        display: grid;
-        place-items: center;
-        font-weight: 700;
-        font-size: 20px;
-        color: var(--navy);
-      }
-      .tl {
-        display: flex;
-        margin: 12px 0 4px;
-      }
-      .ts {
-        flex: 1;
-        text-align: center;
-        font-size: 10.5px;
-        font-weight: 600;
-        color: var(--mute);
-      }
-      .ts i {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        margin: 0 auto 6px;
-        display: grid;
-        place-items: center;
-        background: #fff;
-        border: 2px solid rgba(19, 38, 74, 0.15);
-        font-style: normal;
-        font-size: 12px;
-      }
-      .ts.d i {
-        background: var(--green);
-        border-color: var(--green);
-        color: #fff;
-      }
-      .ts.d {
-        color: var(--green);
-      }
-      .ts.a {
-        color: var(--navy);
-      }
-      .ts.a i {
-        border: 3px solid rgba(30, 58, 110, 0.2);
-        border-top-color: var(--navy2);
-        animation: sp 1s linear infinite;
-      }
-      .ts.e i {
-        background: var(--red);
-        color: #fff;
-        border-color: var(--red);
-      }
-      @keyframes sp {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .sc {
-        margin-top: 9px;
-        padding: 11px 14px;
-        font-size: 12px;
-      }
-      .sc b {
-        display: flex;
-        justify-content: space-between;
-        color: var(--navy);
-        font-size: 13px;
-      }
-      .sc ul {
-        list-style: none;
-        padding: 0;
-        margin-top: 5px;
-        color: var(--mute);
-      }
-      .sc li:before {
-        content: "◦ ";
-        color: var(--gold);
-      }
-      .sc.w {
-        opacity: 0.55;
-      }
-      .bar {
-        height: 8px;
-        border-radius: 9px;
-        background: rgba(19, 38, 74, 0.1);
-        overflow: hidden;
-      }
-      .bar div {
-        height: 100%;
-        background: linear-gradient(to left, var(--gold), var(--navy2));
-        border-radius: 9px;
-        transition: width 0.3s;
-      }
-      .res {
-        border-radius: 22px;
-        padding: 15px 16px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        color: #fff;
-      }
-      .res.ok {
-        background: linear-gradient(160deg, #37ae79, #1f7f52);
-      }
-      .res.bad {
-        background: linear-gradient(160deg, #c75b5b, #8f3030);
-      }
-      .res.mid {
-        background: linear-gradient(160deg, #d2a74a, #9b7220);
-      }
-      .res .ck {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.22);
-        display: grid;
-        place-items: center;
-        font-size: 22px;
-        flex: none;
-      }
-      .res b {
-        font-size: 20px;
-        display: block;
-      }
-      .res span {
-        font-size: 12.5px;
-        opacity: 0.95;
-        line-height: 1.6;
-      }
-      .ev {
-        margin-top: 10px;
-        padding: 0;
-        overflow: hidden;
-      }
-      .acc {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        border: 0;
-        background: none;
-        padding: 13px 14px;
-        font: 700 13.5px inherit;
-        font-family: inherit;
-        color: var(--navy);
-        cursor: pointer;
-      }
-      .bd {
-        font-size: 10.5px;
-        font-weight: 700;
-        padding: 3px 9px;
-        border-radius: 99px;
-      }
-      .bd.ok {
-        background: var(--gbg);
-        color: var(--green);
-      }
-      .bd.bad {
-        background: var(--rbg);
-        color: var(--red);
-      }
-      .bd.mid {
-        background: var(--abg);
-        color: var(--amb);
-      }
-      .bd.na {
-        background: var(--bg2);
-        color: var(--mute);
-      }
-      .bdy {
-        display: none;
-        padding: 0 14px 14px;
-        font-size: 12.5px;
-        line-height: 1.8;
-      }
-      .ev.o .bdy {
-        display: block;
-      }
-      .ev.o .chev {
-        transform: rotate(180deg);
-      }
-      .chev {
-        transition: transform 0.2s;
-        color: var(--gold);
-      }
-      .kv {
-        display: flex;
-        gap: 8px;
-        padding: 3px 0;
-      }
-      .kv b {
-        color: var(--gold);
-        flex: none;
-        width: 62px;
-      }
-      .wf {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 8px;
-        font-size: 10.5px;
-        color: var(--mute);
-      }
-      .wf em {
-        width: 60px;
-        font-style: normal;
-        flex: none;
-      }
-      .wf p {
-        flex: 1;
-        line-height: 1.5;
-        color: var(--ink);
-        font-size: 11.5px;
-      }
-      .w {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        height: 22px;
-        direction: ltr;
-        margin-top: 3px;
-      }
-      .w s {
-        display: block;
-        width: 3px;
-        border-radius: 2px;
-        background: #b9bfcb;
-      }
-      .w.m s {
-        background: var(--green);
-      }
-      .src {
-        margin-top: 8px;
-        padding: 8px 10px;
-        border-radius: 12px;
-        background: var(--bg2);
-        font-size: 12px;
-      }
-      .ref {
-        padding: 6px 0;
-        border-bottom: 1px dashed rgba(19, 38, 74, 0.15);
-      }
-      .ref:last-child {
-        border: 0;
-      }
-      .ref small {
-        display: block;
-        color: var(--mute);
-        direction: ltr;
-        text-align: right;
-        word-break: break-all;
-      }
-      .note {
-        font-size: 11px;
-        color: var(--mute);
-        line-height: 1.8;
-        margin-top: 12px;
-        text-align: center;
-      }
-      .sheet {
-        position: absolute;
-        inset: 0;
-        background: rgba(10, 15, 30, 0.5);
-        display: flex;
-        align-items: flex-end;
-        z-index: 20;
-      }
-      .sheet > div {
-        background: var(--bg);
-        width: 100%;
-        border-radius: 26px 26px 0 0;
-        padding: 18px 18px calc(18px + env(safe-area-inset-bottom, 0px));
-      }
-      .sheet textarea {
-        height: 190px;
-        margin: 10px 0;
-      }
-      .two {
-        display: flex;
-        gap: 8px;
-      }
-      #toast {
-        position: absolute;
-        bottom: 26px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--navy);
-        color: #fff;
-        padding: 10px 18px;
-        border-radius: 99px;
-        font-size: 13px;
-        opacity: 0;
-        transition: 0.25s;
-        pointer-events: none;
-        z-index: 30;
-        white-space: nowrap;
-      }
-      #toast.s {
-        opacity: 1;
-      }
-      .sp {
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(170deg, #f4ecdc, #e3d4b5);
-      }
-      .mg {
-        animation: sw 1.6s ease-in-out infinite;
-        transform-origin: 36px 36px;
-      }
-      @keyframes sw {
-        0%,
-        100% {
-          transform: translate(-14px, -6px);
-        }
-        50% {
-          transform: translate(10px, 8px);
-        }
-      }
-      .ckk {
-        stroke-dasharray: 30;
-        stroke-dashoffset: 30;
-        animation: dr 0.6s 1.5s forwards;
-      }
-      @keyframes dr {
-        to {
-          stroke-dashoffset: 0;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          animation-duration: 0.01s !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app">
-      <div id="scr"></div>
-      <div id="toast"></div>
-    </div>
-    <script>
-     const MOCK = false;
-     const API_BASE = "https://bayyinah-7pdm.onrender.com";
-
-      const $ = (s) => document.querySelector(s),
-        esc = (s) =>
-          String(s ?? "").replace(
-            /[&<>"']/g,
-            (c) =>
-              ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;",
-              })[c],
-          ),
-        sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-      const S = {
-        scr: "splash",
-        tab: "audio",
-        file: null,
-        url: "",
-        text: "",
-        ctx: "",
-        st: [0, 0, 0],
-        pct: 0,
-        rep: null,
-        err: null,
-        open: [],
-        form: "",
-        mockPick: null,
-      };
-
-      const MOSQUE =
-        '<svg class="moq" viewBox="0 0 300 150" fill="#13264A"><path d="M0 150V110h30V80l8-14 8 14v30h20V95c0-22 20-32 20-50 0-8 4-14 4-20h4c0 6 4 12 4 20 0 18 20 28 20 50v15h20V90l8-14 8 14v20h30V70c0-10 8-14 8-24 0 10 8 14 8 24v40h20v-30l8-14 8 14v30h30v40z"/></svg>';
-      const MARK = (s = 86) =>
-        `<svg width="${s}" height="${s}" viewBox="0 0 86 86" fill="none"><g class="mg"><circle cx="36" cy="36" r="26" fill="#fff" fill-opacity=".6" stroke="#13264A" stroke-width="5"/><path d="M22 28c5-2 10-1 14 2 4-3 9-4 14-2v22c-5-2-10-1-14 2-4-3-9-4-14-2z" fill="#13264A"/><path d="M56 56l18 18" stroke="#C49A3F" stroke-width="7" stroke-linecap="round"/></g><circle cx="64" cy="22" r="13" fill="#2C9A68"/><path class="ckk" d="M58 22l5 5 8-9" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-      // 2. Health Check
-      function checkHealth() {
-        if (!MOCK && API_BASE) {
-          fetch(`${API_BASE}/health`).catch(() => {});
-        }
-      }
-      checkHealth();
-
-      function go(s) {
-        S.scr = s;
-        render();
-      }
-
-      function toast(t) {
-        const e = $("#toast");
-        e.textContent = t;
-        e.classList.add("s");
-        setTimeout(() => e.classList.remove("s"), 2200);
-      }
-
-      const V = {
-        supported: {
-          t: "مؤيد بالمصدر",
-          s: "المقطع صحيح ومطابق للمصدر الأصلي",
-          c: "ok",
-          i: "✓",
-        },
-        contradicted: {
-          t: "مخالف للمصدر",
-          s: "المقطع يخالف ما ورد في المصدر الأصلي",
-          c: "bad",
-          i: "✕",
-        },
-        undetermined: {
-          t: "غير محسوم",
-          s: "لا تكفي القرائن للحكم القاطع في هذا المقطع",
-          c: "mid",
-          i: "؟",
-        },
-      };
-
-      const VIEWS = {
-        splash: () =>
-          `<div class="sp" style="flex:1;display:flex;flex-direction:column;gap:6px;margin:-18px -20px -22px">${MARK(120)}<div class="logo"><b>بينة</b><small>BAYYINAH</small></div></div>`,
-        home: () => `${MOSQUE}<div class="z logo" style="margin-top:14px">${MARK(84).replace('class="mg"', "")}<b>بينة</b><small>BAYYINAH</small></div>
-<h2 class="z" style="text-align:center;font-size:26px;margin:18px 0 8px">هل هذا المقطع موثوق؟</h2>
-<p class="z sub" style="margin-bottom:20px">أداة ذكية للتحقق من أصالة المقاطع الصوتية ومطابقة مصادرها والتحقق من مضمونها</p>
-<button class="btn z" data-a="up">تحقق من مقطع</button>
-<h3 class="z" style="font-size:14px;text-align:center;margin:auto 0 10px;padding-top:18px">كيف تعمل بينة؟</h3>
-<div class="how z"><div class="card"><i>🎙<em>1</em></i>فحص الأصالة</div><div class="card"><i>🔍<em>2</em></i>البحث عن الأصل</div><div class="card"><i>📖<em>3</em></i>التحقق من المضمون</div></div>`,
-        upload: () => {
-          const m = S.tab == "audio" || S.tab == "video",
-            acc =
-              S.tab == "audio" ? "audio/*,.mp3,.wav,.m4a" : "video/*,.mp4,.mov",
-            fm =
-              S.tab == "audio"
-                ? ["MP3", "WAV", "M4A", "OGG"]
-                : ["MP4", "MOV", "WEBM"];
-          return `<div class="hd"><button data-a="home" aria-label="رجوع">›</button><h4>تحقق من مقطع</h4></div>
-<div class="tabs" role="tablist">${[
-            ["audio", "صوت"],
-            ["video", "فيديو"],
-            ["url", "رابط"],
-            ["text", "نص"],
-          ]
-            .map(
-              (t) =>
-                `<button class="tab ${S.tab == t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
-            )
-            .join("")}</div>
-${
-  m
-    ? `<label class="up"><input type="file" id="fi" accept="${acc}" hidden><div class="cl">${S.file ? "✓" : "☁"}</div><b style="display:block;color:var(--navy);font-size:16px">${S.file ? esc(S.file.name) : S.tab == "audio" ? "ارفع ملف صوتي" : "ارفع ملف فيديو"}</b><span style="font-size:11.5px;color:var(--mute)">${S.file ? (S.file.size / 1048576).toFixed(1) + " ميغابايت · اضغط للتغيير" : "اضغط للاختيار (حتى ٥٠ ميغابايت)"}</span><div class="chips">${fm.map((x) => `<span>${x}</span>`).join("")}</div></label>
-<label class="l" for="cx">نص المقطع إن توفر (اختياري، يرفع دقة التحقق من المضمون)</label><textarea id="cx" rows="4" placeholder="اكتب ما قيل في المقطع…">${esc(S.ctx)}</textarea>`
-    : S.tab == "url"
-      ? `<label class="l" for="ur">رابط المقطع</label><input type="url" id="ur" dir="ltr" placeholder="https://" value="${esc(S.url)}"><p class="sub" style="margin-top:8px;font-size:12px">لا يُحمَّل المقطع من الرابط؛ يُحلَّل الرابط وما تكتبه عنه.</p><label class="l" for="cx">ما قيل في المقطع (اختياري)</label><textarea id="cx" rows="4">${esc(S.ctx)}</textarea>`
-      : `<label class="l" for="tx">النص المراد التحقق منه</label><textarea id="tx" rows="9" placeholder="الصق أو اكتب النص هنا…">${esc(S.text)}</textarea>`
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>بيّنة | التحقق من المقاطع الدينية المنسوبة</title>
+<meta name="description" content="أداة للمعرّفين ومدققي المحتوى تتحقق من المقاطع والنصوص المنسوبة، وتعرض حكم الحديث بلفظه من مصدره المعتمد." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#14213D;        /* حبر التخريج */
+  --ink-2:#3B4766;
+  --mute:#6B7590;
+  --page:#F3F5FA;
+  --paper:#FFFFFF;
+  --line:#DDE2EE;
+  --line-2:#EBEEF5;
+  --teal:#0E7C7B;
+  --teal-soft:#E3F2F1;
+  --ok:#1F7A55;  --ok-soft:#E6F3EC;
+  --bad:#B3261E; --bad-soft:#FBEAE8;
+  --mid:#9A6300; --mid-soft:#FBF1DE;
+  --na:#7A8199;  --na-soft:#EEF0F5;
+  --naskh:"Amiri", "Traditional Arabic", serif;
+  --sans:"IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --r:10px;
 }
-${S.form ? `<div class="err" role="alert">${esc(S.form)}</div>` : ""}
-<button class="btn" style="margin-top:auto" data-a="start">بدء التحليل</button>`;
-        },
-        analysis: () => {
-          const N = [
-              [
-                "فحص الأصالة التقنية",
-                [
-                  "كشف الصوت المُولَّد بالذكاء الاصطناعي",
-                  "مقارنة الخصائص الصوتية",
-                ],
-              ],
-              [
-                "البحث عن الأصل",
-                ["البحث عن المصدر الأصلي", "مقارنة السياق قبل المقطع وبعده"],
-              ],
-              ["التحقق من المضمون", ["استخراج نص المقطع", "التحقق من المراجع"]],
-            ],
-            L = [
-              "في الانتظار",
-              "قيد التنفيذ…",
-              "اكتمل ✓",
-              "لا ينطبق",
-              "تعذّر",
-            ],
-            C = ["", "a", "d", "d", "e"],
-            I = ["١", "", "✓", "–", "!"];
-          return `<div class="ring" style="background:conic-gradient(${S.err ? "var(--red)" : "var(--navy2)"} ${S.pct * 3.6}deg,rgba(19,38,74,.1) 0)"><div>${Math.round(S.pct)}%</div></div>
-<h2 style="text-align:center;font-size:22px" role="status">${S.err ? "تعذّر إكمال التحليل" : "جاري التحليل..."}</h2>
-<div class="tl">${N.map((n, i) => `<div class="ts ${C[S.st[i]]}"><i>${I[S.st[i]] || i + 1}</i>${n[0]}</div>`).join("")}</div>
-${N.map((n, i) => `<div class="card sc ${S.st[i] == 0 ? "w" : ""}"><b><span>${n[0]}</span><span style="font-weight:500;color:${S.st[i] == 4 ? "var(--red)" : "var(--mute)"}">${L[S.st[i]]}</span></b><ul>${n[1].map((x) => `<li>${x}</li>`).join("")}</ul></div>`).join("")}
-${S.err ? `<div class="err" role="alert">${esc(S.err)}</div><div class="two" style="margin-top:12px"><button class="btn" data-a="start">إعادة المحاولة</button><button class="btn alt" data-a="up">تعديل المدخلات</button></div>` : `<div class="card" style="margin-top:auto"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--navy);margin-bottom:6px"><span>التقدم الكلي</span><span>${Math.round(S.pct)}%</span></div><div class="bar"><div style="width:${S.pct}%"></div></div></div>`}`;
-        },
-        report: () => {
-          const R = S.rep;
-          if (!R) return "";
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--page);color:var(--ink);font:400 16px/1.7 var(--sans);min-height:100vh}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
 
-          const vKey = R.verdict || "undetermined";
-          const vDefault = V[vKey] || V.undetermined;
+/* ---------- الترويسة ---------- */
+header.top{background:var(--ink);color:#fff}
+header.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px}
+.brand{display:flex;align-items:baseline;gap:14px}
+.brand b{font:700 30px/1 var(--naskh)}
+.brand span{color:#B9C3DA;font-size:14px}
+.status{margin-inline-start:auto;display:flex;align-items:center;gap:8px;font-size:13.5px;color:#D5DBEA}
+.dot{width:9px;height:9px;border-radius:50%;background:#7A8199}
+.status.on .dot{background:#3CCB8F;box-shadow:0 0 0 4px rgba(60,203,143,.18)}
+.status.wait .dot{background:#E3B341;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.35}}
 
-          // Section 6: Use verdict_title and verdict_summary returned by backend directly
-          const vTitle = esc(R.verdict_title || vDefault.t);
-          const vSummary = esc(R.verdict_summary || vDefault.s);
-          const vColorClass = vDefault.c;
-          const vIcon = vDefault.i;
+.intro{background:var(--ink);color:#fff;padding:6px 0 34px;border-bottom:4px solid var(--teal)}
+.intro .wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:end}
+.ayah{font:400 clamp(26px,3.4vw,40px)/1.5 var(--naskh);color:#fff}
+.ayah small{display:block;font:400 14px/1.6 var(--sans);color:#9FAAC6;margin-top:6px}
+.intro p{color:#C9D1E4;font-size:15.5px;max-width:52ch}
 
-          const ob = (cardIdx) => `class="card ev ${S.open[cardIdx] ? "o" : ""}"`;
+/* ---------- التخطيط ---------- */
+main.wrap{display:grid;grid-template-columns:420px 1fr;gap:28px;padding-top:28px;padding-bottom:56px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.input{position:sticky;top:16px;padding:22px}
+.input h2{font-size:18px;font-weight:600;margin-bottom:14px}
 
-          // Section 7: Authenticity Evidence & Waveform
-          const auth = R.evidence?.authenticity || {};
-          const speakerMatch = R.evidence?.speaker_match || {};
-          const sig = auth.signal;
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.tab{border:0;background:var(--paper);padding:9px 4px;font-size:14px;font-weight:500;color:var(--ink-2);cursor:pointer;border-inline-start:1px solid var(--line)}
+.tab:first-child{border-inline-start:0}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
 
-          let authBadgeClass = "na";
-          if (sig === "likely_human") authBadgeClass = "ok";
-          else if (sig === "inconclusive") authBadgeClass = "mid";
-          else if (sig === "likely_synthetic") authBadgeClass = "bad";
+.drop{display:block;border:1.5px dashed #B8C1D6;border-radius:8px;padding:26px 16px;text-align:center;cursor:pointer;background:#FAFBFD;transition:background .15s,border-color .15s}
+.drop:hover,.drop.over{background:var(--teal-soft);border-color:var(--teal)}
+.drop strong{display:block;font-size:16px;font-weight:600}
+.drop span{font-size:13.5px;color:var(--mute)}
+.drop .file{margin-top:8px;font-size:14px;color:var(--teal);font-weight:600;word-break:break-all}
 
-          const authLabel = esc(auth.label || "لم يُجرَ الفحص التقني");
+label.f{display:block;font-size:14px;font-weight:500;margin:14px 0 6px;color:var(--ink-2)}
+textarea,input[type=url]{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px 12px;background:#fff;resize:vertical;line-height:1.7}
+textarea:focus,input[type=url]:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 3px var(--teal-soft)}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
 
-          const wv = (p, c) =>
-            `<div class="w ${c || ""}">${(p || []).map((h) => `<s style="height:${Math.max(3, Math.round(h * 18))}px"></s>`).join("")}</div>`;
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:12px 18px;font-weight:600;font-size:15.5px;cursor:pointer}
+.btn.primary{background:var(--teal);color:#fff;width:100%;margin-top:16px}
+.btn.primary:hover{background:#0B6867}
+.btn.primary:disabled{opacity:.55;cursor:not-allowed}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink-2)}
 
-          const waveformData = auth.waveform;
-          const durSec = R.transcript?.duration_sec;
+.err{background:var(--bad-soft);color:var(--bad);border-radius:8px;padding:10px 12px;font-size:14px;margin-top:12px}
 
-          // Section 9: Original Match Evidence
-          const origMatch = R.evidence?.original_match || {};
-          const origStatus = origMatch.status;
-          const origBadgeClass = origStatus === "found" ? "ok" : "na";
-          const origLabel = esc(origMatch.label || "لم يُعثر على الأصل");
+.samples{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-2)}
+.samples p{font-size:13.5px;color:var(--mute);margin-bottom:8px}
+.chip{display:block;width:100%;text-align:right;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;margin-bottom:6px;cursor:pointer;font:400 17px/1.6 var(--naskh)}
+.chip:hover{border-color:var(--teal);background:var(--teal-soft)}
+.chip em{display:block;font:500 12.5px/1.4 var(--sans);font-style:normal;color:var(--mute);margin-top:2px}
 
-          // Section 10: Content Claims / Hadiths (ARRAY)
-          const content = R.evidence?.content || {};
-          const claims = content.claims || [];
+/* ---------- منطقة التقرير ---------- */
+.out{min-height:520px}
+.empty{padding:40px 36px}
+.empty h2{font:700 30px/1.4 var(--naskh);margin-bottom:8px}
+.empty>p{color:var(--ink-2);max-width:60ch;margin-bottom:24px}
+.ev3{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.ev3>div{padding:18px 18px 4px 18px;border-inline-start:1px solid var(--line)}
+.ev3>div:first-child{border-inline-start:0;padding-inline-start:0}
+.ev3 h3{font-size:15.5px;font-weight:600;margin-bottom:4px}
+.ev3 p{font-size:14px;color:var(--mute)}
+.rules{margin-top:26px;background:var(--page);border-radius:8px;padding:16px 18px}
+.rules h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.rules ul{list-style:none}
+.rules li{font-size:14.5px;color:var(--ink-2);padding:3px 0;padding-inline-start:16px;position:relative}
+.rules li::before{content:"";position:absolute;inset-inline-start:0;top:13px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
 
-          return `<div class="hd"><button data-a="home" aria-label="الرئيسية">⌂</button><h4>تقرير التحقق</h4></div>
-<div class="res ${vColorClass}"><div class="ck">${vIcon}</div><div><b>${vTitle}</b><span>${vSummary}</span></div></div>
+/* التقدم */
+.progress{padding:40px 36px}
+.progress h2{font-size:22px;font-weight:600}
+.progress .slow{color:var(--mute);font-size:14.5px;margin-top:4px;min-height:24px}
+.steps{list-style:none;margin-top:24px}
+.steps li{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line-2);color:var(--mute)}
+.steps li b{font-weight:600;color:inherit}
+.steps .ic{width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
+.steps li.run{color:var(--ink)}
+.steps li.run .ic{border-color:var(--teal);border-top-color:transparent;animation:spin .9s linear infinite}
+.steps li.done{color:var(--ink)}
+.steps li.done .ic{background:var(--teal);border-color:var(--teal);position:relative}
+.steps li.done .ic::after{content:"";position:absolute;inset:5px 6px 7px 5px;border:solid #fff;border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.steps time{font-size:13px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-<!-- Card 0: Technical Authenticity -->
-<div ${ob(0)}>
-  <button class="acc" data-a="acc" data-v="0">
-    <span>🎙️ الأصالة التقنية</span>
-    <span><span class="bd ${authBadgeClass}">${authLabel}</span> <span class="chev">⌄</span></span>
-  </button>
-  <div class="bdy">
-    <div class="kv"><b>الأصالة</b><span>${authLabel}</span></div>
-    ${durSec != null ? `<div class="kv"><b>المدة</b><span>${durSec} ثانية</span></div>` : ""}
-    <!-- Section 8: Speaker Match -->
-    <div class="kv"><b>مطابقة الصوت</b><span>${esc(speakerMatch.label || "غير متوفر")}</span></div>
-    ${waveformData && Array.isArray(waveformData) && waveformData.length > 0 ? `
-      <div class="wf" style="margin-top:10px">
-        <em>مخطط الصوت</em>
-        <div style="flex:1">${wv(waveformData, sig === "likely_synthetic" ? "bad" : "m")}</div>
+/* التقرير */
+.report{padding:0}
+.verdict{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:24px 28px;border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
+.verdict.ok{background:var(--ok-soft)} .verdict.bad{background:var(--bad-soft)} .verdict.mid{background:var(--mid-soft)}
+.seal{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;text-align:center;font:700 15px/1.25 var(--sans);color:#fff;border:3px double rgba(255,255,255,.75);outline:3px solid currentColor;outline-offset:2px}
+.ok .seal{background:var(--ok);color:var(--ok)} .bad .seal{background:var(--bad);color:var(--bad)} .mid .seal{background:var(--mid);color:var(--mid)}
+.seal span{color:#fff}
+.verdict h2{font-size:24px;font-weight:700;line-height:1.35}
+.ok h2{color:var(--ok)} .bad h2{color:var(--bad)} .mid h2{color:var(--mid)}
+.verdict p{color:var(--ink-2);font-size:15.5px}
+.verdict .meta{text-align:left;font-size:13px;color:var(--mute);white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){.seal{animation:stamp .45s cubic-bezier(.2,1.4,.4,1) both}}
+@keyframes stamp{from{transform:scale(1.6) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+
+.sec{padding:22px 28px;border-bottom:1px solid var(--line-2)}
+.sec:last-child{border-bottom:0}
+.sec>h3{font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:10px}
+.heard{font:400 21px/1.8 var(--naskh);color:var(--ink)}
+.heard small{display:block;font:400 13px/1.5 var(--sans);color:var(--mute);margin-top:2px}
+
+/* بطاقة التخريج: متن على اليمين وحاشية على اليسار */
+.takhrij{display:grid;grid-template-columns:1fr 250px;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.matn{padding:18px 20px}
+.matn .q{font-size:13px;color:var(--mute);margin-bottom:6px}
+.matn .q q{color:var(--ink-2);font-weight:500}
+.matn .text{font:400 24px/1.85 var(--naskh)}
+.matn .note{margin-top:10px;font-size:14px;color:var(--ink-2);background:var(--page);border-radius:6px;padding:8px 10px}
+.hashiya{background:#FAFBFD;border-inline-start:1px solid var(--line);padding:16px 18px;font-size:14px}
+.grade{display:block;font:700 19px/1.4 var(--naskh);padding:6px 10px;border-radius:6px;margin-bottom:12px}
+.grade.authentic{background:var(--ok-soft);color:var(--ok)}
+.grade.weak,.grade.not_authentic,.grade.detailed{background:var(--bad-soft);color:var(--bad)}
+.grade.unknown{background:var(--mid-soft);color:var(--mid)}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+dl.kv dt{color:var(--mute)}
+dl.kv dd{color:var(--ink);font-weight:500}
+.alt{grid-column:1/-1;border-top:1px solid var(--line);background:var(--ok-soft);padding:16px 20px;display:grid;grid-template-columns:1fr 250px;gap:20px}
+.alt h4{font-size:14px;font-weight:600;color:var(--ok);margin-bottom:4px}
+.alt .text{font:400 20px/1.85 var(--naskh)}
+.alt dl.kv{font-size:13.5px;align-self:start}
+.nf{border:1px dashed #C9B07A;background:var(--mid-soft);border-radius:8px;padding:16px 18px}
+.nf .text{font:400 21px/1.8 var(--naskh)}
+.nf p{font-size:14.5px;color:var(--mid);margin-top:6px}
+
+/* القرائن التقنية: صفوف لا بطاقات */
+.evid{list-style:none}
+.evid li{display:grid;grid-template-columns:170px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line-2);font-size:14.5px}
+.evid li:first-child{border-top:0;padding-top:0}
+.evid b{font-weight:600}
+.tag{font-size:12.5px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)} .tag.bad{background:var(--bad-soft);color:var(--bad)}
+.tag.mid{background:var(--mid-soft);color:var(--mid)} .tag.na{background:var(--na-soft);color:var(--na)}
+.wave{display:flex;align-items:center;gap:2px;height:30px;direction:ltr;margin-top:6px}
+.wave i{display:block;width:4px;border-radius:2px;background:var(--teal);opacity:.75}
+
+.disc{font-size:13.5px;color:var(--mute)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;padding:18px 28px 24px}
+.actions .btn.primary{width:auto;margin:0}
+details.tech{padding:0 28px 22px;font-size:13.5px;color:var(--mute)}
+details.tech summary{cursor:pointer}
+details.tech dl{margin-top:8px}
+
+#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.2s;pointer-events:none;z-index:9}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+footer{border-top:1px solid var(--line);padding:22px 0 30px;font-size:13.5px;color:var(--mute)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+footer a{color:var(--teal)}
+
+/* ---------- الجوال ---------- */
+@media (max-width:980px){
+  .intro .wrap{grid-template-columns:1fr;gap:12px}
+  main.wrap{grid-template-columns:1fr}
+  .input{position:static}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .brand span{display:none}
+  .empty,.progress{padding:26px 18px}
+  .ev3{grid-template-columns:1fr}
+  .ev3>div{border-inline-start:0;border-top:1px solid var(--line-2);padding-inline-start:0}
+  .verdict{grid-template-columns:auto 1fr;padding:20px 18px}
+  .verdict .meta{grid-column:1/-1;text-align:right}
+  .sec{padding:18px}
+  .takhrij,.alt{grid-template-columns:1fr}
+  .hashiya{border-inline-start:0;border-top:1px solid var(--line)}
+  .evid li{grid-template-columns:1fr auto}
+  .evid li .d{grid-column:1/-1}
+  .actions{padding:16px 18px 20px}
+  details.tech{padding:0 18px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>بيّنة</b><span>التحقق من المقاطع الدينية المنسوبة</span></div>
+    <div class="status wait" id="status" role="status"><i class="dot"></i><span>جارٍ الاتصال بالنظام</span></div>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <div class="ayah">﴿قُلْ إِنِّي عَلَىٰ بَيِّنَةٍ مِّن رَّبِّي﴾<small>الأنعام: 57</small></div>
+    <p>ارفع المقطع أو الصق النص، وتعرض لك بيّنة حكم الحديث بلفظه، ومن حكم به، ومصدره، والبديل الصحيح. وإذا لم تكفِ القرائن تمتنع عن الحكم وتحيل إلى المختص.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <!-- لوحة الإدخال -->
+  <section class="panel input" aria-labelledby="inTitle">
+    <h2 id="inTitle">تحقّق من مقطع</h2>
+    <div class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" data-tab="audio" aria-selected="true">صوت</button>
+      <button class="tab" role="tab" data-tab="video" aria-selected="false">فيديو</button>
+      <button class="tab" role="tab" data-tab="text" aria-selected="false">نص</button>
+      <button class="tab" role="tab" data-tab="url" aria-selected="false">رابط</button>
+    </div>
+    <div id="fields"></div>
+    <div class="err" id="formErr" role="alert" hidden></div>
+    <button class="btn primary" id="go">تحقّق الآن</button>
+
+    <div class="samples">
+      <p>جرّب بنص منتشر:</p>
+      <button class="chip" data-sample="قال رسول الله صلى الله عليه وسلم: الجنة تحت أقدام الأمهات">الجنة تحت أقدام الأمهات</button>
+      <button class="chip" data-sample="قال النبي صلى الله عليه وسلم: من لا يرحم لا يرحم">من لا يرحم لا يرحم</button>
+      <button class="chip" data-sample="إن أبغض الحلال إلى الله عز وجل الطلاق">إن أبغض الحلال إلى الله الطلاق</button>
+      <button class="chip" data-sample="من صام يوم كذا كتب الله له أجر ألف شهيد">من صام يوم كذا كتب الله له أجر ألف شهيد<em>ليس في القاعدة</em></button>
+    </div>
+  </section>
+
+  <!-- منطقة النتيجة -->
+  <section class="panel out" id="out" aria-live="polite"></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>بيّنة، تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي 2026، المسار 04</span>
+    <span>التقرير قرائن مساعدة وليس حكماً قطعياً، والمرجع في الحكم أهل العلم.</span>
+  </div>
+</footer>
+<div id="toast" role="status"></div>
+
+<script>
+/* الإعدادات */
+const MOCK = false;               // true للتجربة على ملفات mock بدون النظام
+const MOCK_PICK = "contradicted"; // supported | contradicted | undetermined
+const API_BASE = "https://bayyinah-7pdm.onrender.com";
+const MAX_MB = 50;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toAr = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+const S = { tab: "audio", file: null, text: "", url: "", ctx: "", busy: false, rep: null, hadiths: null };
+
+/* ---------- حالة الاتصال ---------- */
+async function ping() {
+  const el = $("#status");
+  if (MOCK) { el.className = "status on"; el.lastChild.textContent = "وضع التجربة"; return; }
+  try {
+    const r = await fetch(API_BASE + "/health");
+    const d = await r.json();
+    S.hadiths = d.hadiths;
+    el.className = "status on";
+    el.lastChild.textContent = `متصل، وفي القاعدة ${toAr(d.hadiths)} حديثاً`;
+    renderEmpty();
+  } catch {
+    el.className = "status";
+    el.lastChild.textContent = "النظام غير متاح الآن";
+  }
+}
+
+/* ---------- حقول الإدخال ---------- */
+function renderFields() {
+  const f = $("#fields");
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === S.tab));
+  if (S.tab === "audio" || S.tab === "video") {
+    const fmt = S.tab === "audio" ? "MP3 أو WAV أو M4A أو OGG" : "MP4 أو MOV أو WEBM";
+    const acc = S.tab === "audio" ? "audio/*,.mp3,.wav,.m4a,.ogg,.opus" : "video/*,.mp4,.mov,.webm";
+    f.innerHTML = `
+      <label class="drop" id="drop" tabindex="0">
+        <input type="file" id="file" accept="${acc}" hidden>
+        <strong>${S.tab === "audio" ? "اسحب الملف الصوتي هنا أو اختره" : "اسحب ملف الفيديو هنا أو اختره"}</strong>
+        <span>${fmt}، حتى ${toAr(MAX_MB)} ميقابايت، والأفضل أقل من دقيقتين</span>
+        ${S.file ? `<div class="file">${esc(S.file.name)}</div>` : ""}
+      </label>
+      <label class="f" for="ctx">ما قيل في المقطع (اختياري)</label>
+      <textarea id="ctx" rows="2" placeholder="يُستخدم إذا تعذّر التفريغ الصوتي">${esc(S.ctx)}</textarea>`;
+    const drop = $("#drop");
+    drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("#file").click(); } });
+    ["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+    ["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+    drop.addEventListener("drop", e => pickFile(e.dataTransfer.files[0]));
+    $("#file").addEventListener("change", e => pickFile(e.target.files[0]));
+  } else if (S.tab === "text") {
+    f.innerHTML = `
+      <label class="f" for="txt">النص المنسوب</label>
+      <textarea id="txt" rows="6" placeholder="الصق الحديث أو الكلام المنتشر كما وصلك">${esc(S.text)}</textarea>
+      <p class="hint">يمكن أن يحتوي النص على أكثر من حديث.</p>`;
+  } else {
+    f.innerHTML = `
+      <label class="f" for="url">رابط المقطع</label>
+      <input type="url" id="url" dir="ltr" placeholder="https://" value="${esc(S.url)}">
+      <label class="f" for="ctx">ما قيل في المقطع</label>
+      <textarea id="ctx" rows="4" placeholder="اكتب ما قيل في المقطع">${esc(S.ctx)}</textarea>
+      <p class="hint">لا يُحمَّل المقطع من الرابط، فيُتحقق من النص الذي تكتبه عنه.</p>`;
+  }
+}
+
+function pickFile(f) {
+  if (!f) return;
+  const ok = /^(audio|video)\//.test(f.type) || /\.(mp3|wav|m4a|ogg|opus|mp4|mov|webm)$/i.test(f.name);
+  if (!ok) return formErr("صيغة الملف غير مدعومة. استخدم MP3 أو WAV أو M4A أو MP4.");
+  if (f.size > MAX_MB * 1048576) return formErr(`حجم الملف أكبر من ${toAr(MAX_MB)} ميقابايت.`);
+  formErr("");
+  S.file = f;
+  renderFields();
+}
+function formErr(m) { const e = $("#formErr"); e.textContent = m; e.hidden = !m; }
+
+/* ---------- الحالة الفارغة ---------- */
+function renderEmpty() {
+  if (S.busy || S.rep) return;
+  $("#out").innerHTML = `
+    <div class="empty">
+      <h2>ثلاث قرائن مستقلة، وحكم من المصدر</h2>
+      <p>لا تولّد بيّنة أي حكم شرعي. كل حكم يظهر في التقرير منقول بلفظه من مرجع معتمد، مع اسم من حكم به ورقم الحديث أو الجزء والصفحة.</p>
+      <div class="ev3">
+        <div><h3>أصالة الصوت</h3><p>هل الصوت بشري أم مولَّد، وهل يطابق صوت المتحدث المنسوب إليه.</p></div>
+        <div><h3>المطابقة مع الأصل</h3><p>البحث عن الدرس الأصلي لكشف الاقتطاع وعرض ما قبل المقطع وما بعده.</p></div>
+        <div><h3>التحقق من المضمون</h3><p>تفريغ الكلام ومقابلة الأحاديث الواردة فيه بقاعدة مغلقة راجعتها متخصصة شرعية.</p></div>
       </div>
-    ` : ""}
-  </div>
-</div>
+      <div class="rules">
+        <h3>متى تمتنع بيّنة عن الحكم</h3>
+        <ul>
+          <li>إذا لم يُعثر على النص في القاعدة، لأن غيابه لا يعني أنه موضوع.</li>
+          <li>إذا كان المقطع قصيراً أو رديئاً لا تكفي قرائنه.</li>
+          <li>إذا احتاج الحكم إلى تفصيل يرجع فيه إلى المختص.</li>
+        </ul>
+      </div>
+    </div>`;
+}
 
-<!-- Card 1: Original Source Matching -->
-<div ${ob(1)}>
-  <button class="acc" data-a="acc" data-v="1">
-    <span>🔍 المطابقة مع الأصل</span>
-    <span><span class="bd ${origBadgeClass}">${origLabel}</span> <span class="chev">⌄</span></span>
-  </button>
-  <div class="bdy">
-    <div style="margin-bottom:6px; font-weight:600; color:var(--navy);">${origLabel}</div>
-    ${origMatch.source ? `<div class="src"><b>المصدر الأصلي:</b> ${esc(origMatch.source)}</div>` : ""}
-    ${origMatch.before ? `<div class="wf"><em>قبل المقطع</em><p>${esc(origMatch.before)}</p></div>` : ""}
-    ${R.transcript && R.transcript.text ? `<div class="wf"><em style="color:var(--green);font-weight:700">المقطع المُستخرج</em><p>${esc(R.transcript.text)}</p></div>` : ""}
-    ${origMatch.after ? `<div class="wf"><em>بعد المقطع</em><p>${esc(origMatch.after)}</p></div>` : ""}
-  </div>
-</div>
+/* ---------- التحليل ---------- */
+const STEPS = [
+  ["قراءة المدخل", "تجهيز الملف أو النص"],
+  ["تفريغ الكلام", "تحويل الصوت إلى نص"],
+  ["البحث في المصادر", "مقابلة الأحاديث بالقاعدة المغلقة"],
+  ["إصدار التقرير", "دمج القرائن وتحديد الحكم"],
+];
+let timer, t0;
+function renderProgress(stage) {
+  const isText = S.tab === "text" || S.tab === "url";
+  const sec = Math.floor((Date.now() - t0) / 1000);
+  $("#out").innerHTML = `
+    <div class="progress">
+      <h2>جارٍ التحقق</h2>
+      <p class="slow">${sec >= 6 ? "أول تحليل بعد فترة خمول قد يستغرق دقيقة، الخادم يجهّز نفسه." : ""}</p>
+      <ol class="steps">
+        ${STEPS.map((s, i) => {
+          if (isText && i === 1) return "";
+          const st = i < stage ? "done" : i === stage ? "run" : "";
+          return `<li class="${st}"><i class="ic"></i><div><b>${s[0]}</b><div style="font-size:13.5px">${s[1]}</div></div><time>${i === stage ? toAr(sec) + " ث" : ""}</time></li>`;
+        }).join("")}
+      </ol>
+    </div>`;
+}
 
-<!-- Section 10: Dynamic Claims rendering -->
-${claims.map((claim, idx) => {
-  const cardIdx = 2 + idx;
-  const hadith = claim.hadith;
-  const gradeClass = hadith?.grade_class;
-  let claimBadgeClass = vColorClass;
-  if (gradeClass === "authentic" || gradeClass === "sahih") claimBadgeClass = "ok";
-  else if (gradeClass === "weak" || gradeClass === "daif") claimBadgeClass = "bad";
-  else if (gradeClass === "hasan") claimBadgeClass = "mid";
-
-  const gradeRawText = hadith?.grade_raw ? esc(hadith.grade_raw) : (claim.matched ? "مطابق" : "غير مطبق");
-  const alt = hadith?.alternative;
-
-  let sourceText = "";
-  if (hadith?.source) {
-    if (typeof hadith.source === "object") {
-      sourceText = hadith.source.book ? hadith.source.book + (hadith.source.ref ? ` (${hadith.source.ref})` : "") : "";
-    } else {
-      sourceText = String(hadith.source);
-    }
+async function analyze() {
+  if (S.busy) return;
+  formErr("");
+  const ctx = $("#ctx")?.value?.trim() ?? S.ctx;
+  if (S.tab === "text") {
+    S.text = $("#txt").value;
+    if (S.text.trim().length < 8) return formErr("اكتب نصاً لا يقل عن ثمانية أحرف.");
+  } else if (S.tab === "url") {
+    S.url = $("#url").value.trim(); S.ctx = ctx;
+    if (!/^https?:\/\/.+\..+/i.test(S.url)) return formErr("أدخل رابطاً صحيحاً يبدأ بـ https://");
+    if (S.ctx.length < 8) return formErr("اكتب ما قيل في المقطع، فالتحليل يعتمد عليه.");
+  } else {
+    S.ctx = ctx;
+    if (!S.file) return formErr("اختر ملفاً أولاً.");
   }
 
+  S.busy = true; S.rep = null; $("#go").disabled = true;
+  t0 = Date.now();
+  const isText = S.tab === "text" || S.tab === "url";
+  let stage = 0;
+  renderProgress(stage);
+  timer = setInterval(() => {
+    const sec = (Date.now() - t0) / 1000;
+    stage = isText ? (sec > .6 ? 2 : 0) : (sec > 1 ? (sec > 8 ? 2 : 1) : 0);
+    renderProgress(stage);
+  }, 500);
+  if (window.innerWidth < 980) $("#out").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  try {
+    let data;
+    if (MOCK) {
+      await new Promise(r => setTimeout(r, 1200));
+      data = await (await fetch(`mock/${MOCK_PICK}.json`)).json();
+    } else {
+      const fd = new FormData();
+      fd.append("input_type", S.tab);
+      if (S.tab === "audio" || S.tab === "video") fd.append("file", S.file);
+      if (S.tab === "text") fd.append("text", S.text);
+      if (S.tab === "url") fd.append("url", S.url);
+      if (S.ctx) fd.append("context", S.ctx);
+      const r = await fetch(API_BASE + "/analyze", { method: "POST", body: fd });
+      data = await r.json();
+      if (!r.ok) throw new Error(data?.error?.message || "تعذّر التحليل. أعد المحاولة.");
+    }
+    clearInterval(timer);
+    renderProgress(3);
+    await new Promise(r => setTimeout(r, 250));
+    S.rep = data;
+    renderReport(data);
+  } catch (e) {
+    clearInterval(timer);
+    const msg = e instanceof TypeError ? "تعذّر الوصول إلى النظام. تأكد من الاتصال وأعد المحاولة." : e.message;
+    $("#out").innerHTML = `<div class="progress"><h2>لم يكتمل التحقق</h2><div class="err">${esc(msg)}</div>
+      <div class="actions" style="padding:16px 0 0"><button class="btn primary" onclick="analyze()">أعد المحاولة</button></div></div>`;
+  } finally {
+    S.busy = false; $("#go").disabled = false;
+  }
+}
+
+/* ---------- التقرير ---------- */
+const VCLS = { supported: "ok", contradicted: "bad", undetermined: "mid" };
+const SEAL = { supported: "ثابت<br>بالمصدر", contradicted: "لا<br>يثبت", undetermined: "يُحال<br>للمختص" };
+
+function src(s) { return s && s.book ? esc(s.book) + (s.ref ? ` (${esc(s.ref)})` : "") : "غير محدد"; }
+
+function claimHTML(c) {
+  if (!c.matched) return `
+    <div class="nf">
+      <div class="text">${esc(c.quoted_text)}</div>
+      <p>لم يُعثر على هذا النص في القاعدة المغلقة. وعدم العثور عليه لا يعني أنه موضوع، فيُحال إلى المختص.</p>
+    </div>`;
+  const h = c.hadith, a = h.alternative;
   return `
-<div ${ob(cardIdx)}>
-  <button class="acc" data-a="acc" data-v="${cardIdx}">
-    <span>📖 ${claims.length > 1 ? `ادعاء ${idx + 1}` : "التحقق من المضمون"}</span>
-    <span><span class="bd ${claimBadgeClass}">${gradeRawText}</span> <span class="chev">⌄</span></span>
-  </button>
-  <div class="bdy">
-    ${claim.quoted_text ? `<div class="kv"><b>النص</b><span>${esc(claim.quoted_text)}</span></div>` : ""}
-    ${hadith ? `
-      ${hadith.text ? `<div class="kv"><b>الحديث</b><span>${esc(hadith.text)}</span></div>` : ""}
-      <!-- Section 11: Hadith Grade -->
-      <div class="kv"><b>درجة الحديث</b><span style="font-weight:700">${esc(hadith.grade_raw)}</span></div>
-      <!-- Section 11: Who Graded the Hadith -->
-      ${hadith.graded_by ? `<div class="kv"><b>حكم عليه</b><span>${esc(hadith.graded_by)}</span></div>` : ""}
-      <!-- Section 11: Source -->
-      ${sourceText ? `
-        <div class="kv">
-          <b>المصدر</b>
-          <span>
-            ${esc(sourceText)}
-            ${hadith.url ? ` <a href="${esc(hadith.url)}" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline;margin-right:4px">🔗 رابط</a>` : ""}
-          </span>
-        </div>
-      ` : ""}
-      <!-- Section 11: Notes -->
-      ${hadith.note ? `<div class="kv"><b>ملاحظات</b><span>${esc(hadith.note)}</span></div>` : ""}
-      
-      <!-- Section 12: Alternative / Correct Hadith -->
-      ${alt && (alt.text || alt.grade_raw) ? `
-        <div class="src" style="margin-top:10px; border-right: 3px solid var(--green);">
-          <b style="color:var(--green); display:block; margin-bottom:4px">الرواية الصحيحة البديلة:</b>
-          ${alt.text ? `<p style="margin-bottom:6px; line-height:1.7">${esc(alt.text)}</p>` : ""}
-          ${alt.grade_raw ? `<div class="kv"><b>درجة الحديث</b><span style="font-weight:700; color:var(--green)">${esc(alt.grade_raw)}</span></div>` : ""}
-          ${alt.graded_by ? `<div class="kv"><b>حكم عليه</b><span>${esc(alt.graded_by)}</span></div>` : ""}
-          ${alt.source ? `<div class="kv"><b>المصدر</b><span>${esc(typeof alt.source === "object" ? alt.source.book + (alt.source.ref ? ` (${alt.source.ref})` : "") : alt.source)}</span></div>` : ""}
-        </div>
-      ` : ""}
-    ` : `
-      <div class="kv"><b>النتيجة</b><span>${esc(content.label || "لم يُعثر على هذا النص في المصادر المتاحة")}</span></div>
-    `}
-  </div>
-</div>`;
-}).join("")}
+    <article class="takhrij">
+      <div class="matn">
+        <div class="q">ورد في المقطع: <q>${esc(c.quoted_text)}</q>${c.match_type === "partial" ? "، ويطابق جزءاً من الحديث" : ""}</div>
+        <div class="text">${esc(h.text)}</div>
+        ${h.note ? `<div class="note">${esc(h.note)}</div>` : ""}
+      </div>
+      <aside class="hashiya">
+        <span class="grade ${esc(h.grade_class)}">${esc(h.grade_raw)}</span>
+        <dl class="kv">
+          ${h.graded_by ? `<dt>الحكم</dt><dd>${esc(h.graded_by)}</dd>` : ""}
+          <dt>المصدر</dt><dd>${src(h.source)}</dd>
+          ${h.narrator ? `<dt>الراوي</dt><dd>${esc(h.narrator)}</dd>` : ""}
+          ${h.takhrij ? `<dt>التخريج</dt><dd>${esc(h.takhrij)}</dd>` : ""}
+        </dl>
+      </aside>
+      ${a ? `
+      <div class="alt">
+        <div><h4>البديل الصحيح</h4><div class="text">${esc(a.text)}</div></div>
+        <dl class="kv">
+          ${a.grade_raw ? `<dt>الحكم</dt><dd>${esc(a.grade_raw)}${a.graded_by ? "، " + esc(a.graded_by) : ""}</dd>` : ""}
+          <dt>المصدر</dt><dd>${src(a.source)}</dd>
+        </dl>
+      </div>` : ""}
+    </article>`;
+}
 
-<!-- Section 6: Disclaimer -->
-<p class="note">${esc(R.disclaimer || "التقرير قرائن مساعدة وليس حكماً قطعياً، والمرجع في الحكم أهل العلم.")}</p>
+function evidRow(name, ev, okKey) {
+  const s = ev?.status, sig = ev?.signal;
+  let cls = "na", tag = "لم يُفحص";
+  if (name === "auth" && s === "checked") {
+    cls = sig === "likely_human" ? "ok" : sig === "likely_synthetic" ? "bad" : "mid";
+    tag = sig === "likely_human" ? "بشري على الأرجح" : sig === "likely_synthetic" ? "مولَّد على الأرجح" : "غير حاسم";
+  } else if (s === "matched" || s === "found") { cls = "ok"; tag = "مطابق"; }
+  else if (s === "not_matched") { cls = "bad"; tag = "غير مطابق"; }
+  else if (s === "not_found") { cls = "mid"; tag = "لم يُعثر عليه"; }
+  else if (s === "no_reference") { cls = "na"; tag = "لا توجد عينة"; }
+  else if (s === "failed") { cls = "mid"; tag = "تعذّر الفحص"; }
+  return { cls, tag };
+}
 
-<div class="two" style="margin-top:12px">
-  <button class="btn" data-a="share">مشاركة الرد</button>
-  <button class="btn alt" style="flex:.6" data-a="up">تحقق جديد</button>
-</div>`;
-        },
-      };
+function renderReport(d) {
+  const v = d.verdict, cls = VCLS[v] || "mid";
+  const E = d.evidence || {};
+  const claims = E.content?.claims || [];
+  const dur = d.transcript?.duration_sec;
+  const secs = (d.processing_ms / 1000).toFixed(1);
+  const isMedia = d.input_type === "audio" || d.input_type === "video";
+  const a = evidRow("auth", E.authenticity), sp = evidRow("sp", E.speaker_match), om = evidRow("om", E.original_match);
+  const wave = E.authenticity?.waveform;
 
-      function render() {
-        const s = $("#scr");
-        s.style.animation = "none";
-        s.offsetWidth;
-        s.style.animation = "";
-        s.innerHTML = VIEWS[S.scr]();
-        if (S.scr == "analysis") s.style.animation = "none";
-      }
+  $("#out").innerHTML = `
+    <div class="report">
+      <div class="verdict ${cls}">
+        <div class="seal"><span>${SEAL[v] || ""}</span></div>
+        <div><h2>${esc(d.verdict_title)}</h2><p>${esc(d.verdict_summary)}</p></div>
+        <div class="meta">${isMedia && dur ? `مقطع ${toAr(dur)} ث<br>` : ""}${d.processing_ms < 1000 ? "تحقق في أقل من ثانية" : `تحقق في ${toAr(secs)} ث`}</div>
+      </div>
 
-      function upd() {
-        if (S.scr == "analysis") {
-          $("#scr").innerHTML = VIEWS.analysis();
-        }
-      }
+      ${isMedia ? `<div class="sec"><h3>ما قيل في المقطع</h3><div class="heard">${esc(d.transcript?.text)}<small>تفريغ آلي للكلام</small></div></div>` : ""}
 
-      function shareText() {
-        const R = S.rep;
-        if (!R) return "";
-        const v = V[R.verdict] || V.undetermined;
-        const title = R.verdict_title || v.t;
-        const summary = R.verdict_summary || v.s;
-        const claims = R.evidence?.content?.claims || [];
-        const claimText = claims.map((c) => c.quoted_text).filter(Boolean).join(" | ") || (R.transcript?.text || "—");
-        const firstHadith = claims[0]?.hadith;
-        const grade = firstHadith ? `${firstHadith.grade_raw}${firstHadith.graded_by ? ` (حكم عليه: ${firstHadith.graded_by})` : ""}` : (R.evidence?.content?.label || "—");
-        const authLabel = R.evidence?.authenticity?.label || "لم يُفحص";
+      <div class="sec">
+        <h3>${claims.length > 1 ? `الأحاديث الواردة (${toAr(claims.length)})` : "الحديث الوارد"}</h3>
+        ${claims.map(claimHTML).join("")}
+      </div>
 
-        return `🔎 تحقق «بينة»\nالنتيجة: ${title}\n— ${summary}\n\n📌 المضمون: ${claimText}\n⚖️ الحكم: ${grade}\n🎙️ الفحص التقني: ${authLabel}\n\nتحقّق بنفسك عبر تطبيق بينة. ${R.disclaimer || "هذا الرد قرائن مساعدة وليس حكمًا قطعيًا."}`;
-      }
+      ${isMedia ? `
+      <div class="sec">
+        <h3>القرائن التقنية</h3>
+        <ul class="evid">
+          <li><b>أصالة الصوت</b><span class="d">${esc(E.authenticity?.label)}
+            ${wave ? `<span class="wave" aria-hidden="true">${wave.map(h => `<i style="height:${4 + h * 26}px"></i>`).join("")}</span>` : ""}</span>
+            <span class="tag ${a.cls}">${a.tag}</span></li>
+          <li><b>صوت المتحدث</b><span class="d">${esc(E.speaker_match?.label)}</span><span class="tag ${sp.cls}">${sp.tag}</span></li>
+          <li><b>المطابقة مع الأصل</b><span class="d">${esc(E.original_match?.label)}</span><span class="tag ${om.cls}">${om.tag}</span></li>
+        </ul>
+      </div>` : ""}
 
-      document.addEventListener("click", async (e) => {
-        const b = e.target.closest("[data-a]");
-        if (!b) return;
-        const a = b.dataset.a,
-          v = b.dataset.v;
-        if (a == "up") {
-          S.form = "";
-          go("upload");
-        } else if (a == "home") go("home");
-        else if (a == "tab") {
-          S.tab = v;
-          S.file = null;
-          S.form = "";
-          render();
-        } else if (a == "start") start();
-        else if (a == "acc") {
-          S.open[v] = S.open[v] ? 0 : 1;
-          b.closest(".ev").classList.toggle("o");
-        } else if (a == "share") {
-          const sh = document.createElement("div");
-          sh.className = "sheet";
-          sh.innerHTML = `<div><h3>رسالة المشاركة</h3><textarea id="st" readonly>${esc(shareText())}</textarea><div class="two"><button class="btn" data-a="copy">نسخ</button><button class="btn alt" data-a="nat">مشاركة…</button><button class="btn alt" style="flex:.5" data-a="x">إغلاق</button></div></div>`;
-          $("#app").appendChild(sh);
-        } else if (a == "x") document.querySelector(".sheet")?.remove();
-        else if (a == "copy") {
-          const t = $("#st");
-          t.select();
-          try {
-            await navigator.clipboard.writeText(t.value);
-            toast("تم النسخ");
-          } catch (_) {
-            document.execCommand && document.execCommand("copy");
-            toast("تم النسخ");
-          }
-        } else if (a == "nat") {
-          try {
-            await navigator.share({ text: shareText() });
-          } catch (_) {
-            toast("المشاركة غير متاحة، استخدم النسخ");
-          }
-        }
-      });
+      <div class="sec"><p class="disc">${esc(d.disclaimer)}</p></div>
 
-      document.addEventListener("input", (e) => {
-        const i = e.target.id;
-        if (i == "cx") S.ctx = e.target.value;
-        if (i == "tx") S.text = e.target.value;
-        if (i == "ur") S.url = e.target.value;
-      });
+      <div class="actions">
+        <button class="btn primary" id="copy">نسخ الرد مع المصدر</button>
+        <button class="btn ghost" id="again">تحقّق من مقطع آخر</button>
+      </div>
+      <details class="tech">
+        <summary>تفاصيل تقنية</summary>
+        <dl class="kv">
+          <dt>رقم الطلب</dt><dd dir="ltr">${esc(d.request_id)}</dd>
+          <dt>نوع المدخل</dt><dd>${esc(d.input_type)}</dd>
+          <dt>زمن المعالجة</dt><dd>${toAr(d.processing_ms)} ملي ثانية</dd>
+          ${d.abstain_reason ? `<dt>سبب الامتناع</dt><dd dir="ltr">${esc(d.abstain_reason)}</dd>` : ""}
+          ${claims.filter(c => c.matched).map(c => `<dt>نوع المطابقة</dt><dd>${c.match_type === "exact" ? "مطابقة تامة" : "مطابقة جزئية"}</dd>`).join("")}
+        </dl>
+      </details>
+    </div>`;
 
-      document.addEventListener("change", (e) => {
-        if (e.target.id != "fi") return;
-        const f = e.target.files[0];
-        if (!f) return;
-        const ok =
-          /^(audio|video)\//.test(f.type) ||
-          /\.(mp3|wav|m4a|mp4|mov|ogg|webm)$/i.test(f.name);
-        if (!ok) {
-          S.form = "صيغة الملف غير مدعومة. استخدم MP3 أو WAV أو M4A أو MP4.";
-          S.file = null;
-        } else if (f.size > 50 * 1048576) {
-          S.form = "حجم الملف يتجاوز ٥٠ ميغابايت.";
-          S.file = null;
-        } else {
-          S.form = "";
-          S.file = f;
-        }
-        render();
-      });
+  $("#copy").onclick = () => copyReply(d);
+  $("#again").onclick = () => { S.rep = null; S.file = null; renderFields(); renderEmpty(); $("#inTitle").scrollIntoView({ behavior: "smooth" }); };
+}
 
-      function start() {
-        S.form = "";
-        if (S.tab == "audio" || S.tab == "video") {
-          if (!S.file) {
-            S.form = "اختر ملفًا أولًا.";
-            return render();
-          }
-        } else if (S.tab == "url") {
-          if (!/^https?:\/\/.+\..+/i.test(S.url.trim())) {
-            S.form = "أدخل رابطًا صحيحًا يبدأ بـ https://";
-            return render();
-          }
-        } else if (S.text.trim().length < 8) {
-          S.form = "اكتب نصًا لا يقل عن ٨ أحرف.";
-          return render();
-        }
-        run();
-      }
+function replyText(d) {
+  const lines = [`تحقق «بيّنة»: ${d.verdict_title}`, d.verdict_summary, ""];
+  for (const c of d.evidence?.content?.claims || []) {
+    if (!c.matched) { lines.push(`النص: ${c.quoted_text}`, "لم يُعثر عليه في المصادر المتاحة، ويُحال إلى المختص.", ""); continue; }
+    const h = c.hadith;
+    lines.push(`الحديث: ${h.text}`, `الحكم: ${h.grade_raw}${h.graded_by ? "، " + h.graded_by : ""}`, `المصدر: ${h.source?.book || ""}${h.source?.ref ? " (" + h.source.ref + ")" : ""}`);
+    if (h.alternative) lines.push(`البديل الصحيح: ${h.alternative.text}`, `حكمه: ${h.alternative.grade_raw || ""}${h.alternative.graded_by ? "، " + h.alternative.graded_by : ""}`);
+    lines.push("");
+  }
+  lines.push(d.disclaimer);
+  return lines.join("\n");
+}
+async function copyReply(d) {
+  const t = replyText(d);
+  try { await navigator.clipboard.writeText(t); toast("نُسخ الرد"); }
+  catch { const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); toast("نُسخ الرد"); }
+}
+function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2000); }
 
-      // Sections 1 & 4: Normalized API & Mock Fetch pipeline
-      async function fetchAnalysisData() {
-        if (MOCK) {
-          const response = await fetch(`mock/${MOCK_RESULT}.json`);
-          if (!response.ok) {
-            throw new Error(`تعذّر تحميل البيانات التجريبية (mock/${MOCK_RESULT}.json)`);
-          }
-          return await response.json();
-        } else {
-          // Section 3: Analyze Request (multipart/form-data)
-          const fd = new FormData();
-          fd.append("input_type", S.tab);
-          if (S.file) {
-            fd.append("file", S.file);
-          }
-          if (S.tab === "url") {
-            fd.append("url", S.url);
-          }
-          if (S.tab === "text") {
-            fd.append("text", S.text);
-          }
-          if (S.ctx) {
-            fd.append("context", S.ctx);
-          }
+/* ---------- الأحداث ---------- */
+$("#tabs").addEventListener("click", e => {
+  const t = e.target.closest(".tab"); if (!t) return;
+  if (S.tab === "text") S.text = $("#txt")?.value ?? S.text;
+  S.tab = t.dataset.tab; S.file = null; formErr(""); renderFields();
+});
+$("#go").addEventListener("click", analyze);
+document.addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  S.tab = "text"; S.text = c.dataset.sample; renderFields(); analyze();
+});
 
-          const res = await fetch(`${API_BASE}/analyze`, {
-            method: "POST",
-            body: fd,
-            // Do NOT manually set Content-Type header
-          });
-
-          const data = await res.json();
-          if (!res.ok) {
-            // Section 13: Error Handling
-            throw new Error(data?.error?.message || "فشلت عملية التحليل.");
-          }
-          return data;
-        }
-      }
-
-      let tk;
-      async function run() {
-        S.err = null;
-        S.st = [1, 0, 0];
-        S.pct = 5;
-        go("analysis");
-        clearInterval(tk);
-
-        tk = setInterval(() => {
-          const i = S.st.indexOf(1),
-            cap = [35, 75, 95][i < 0 ? 2 : i];
-          S.pct += (cap - S.pct) * 0.05;
-          upd();
-        }, 250);
-
-        const stageTimer1 = setTimeout(() => {
-          if (S.st[0] === 1) {
-            S.st = [2, 1, 0];
-            upd();
-          }
-        }, 1000);
-
-        const stageTimer2 = setTimeout(() => {
-          if (S.st[1] === 1) {
-            S.st = [2, 2, 1];
-            upd();
-          }
-        }, 2200);
-
-        try {
-          const data = await fetchAnalysisData();
-
-          clearTimeout(stageTimer1);
-          clearTimeout(stageTimer2);
-
-          S.st = [2, 2, 2];
-          S.pct = 100;
-          upd();
-
-          await sleep(400);
-          clearInterval(tk);
-
-          S.rep = data;
-
-          const claimCount = data?.evidence?.content?.claims?.length || 1;
-          S.open = Array(2 + claimCount).fill(0);
-          S.open[0] = 1;
-          S.open[1] = 0;
-          S.open[2] = 1;
-
-          go("report");
-        } catch (e) {
-          clearTimeout(stageTimer1);
-          clearTimeout(stageTimer2);
-          clearInterval(tk);
-
-          S.err = e.message || "حدث خطأ غير متوقع.";
-          const i = S.st.indexOf(1);
-          S.st[i < 0 ? 1 : i] = 4;
-          upd();
-        }
-      }
-
-      render();
-      setTimeout(() => go("home"), 2800);
-    </script>
-  </body>
+renderFields();
+renderEmpty();
+ping();
+</script>
+</body>
 </html>
