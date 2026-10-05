@@ -164,19 +164,20 @@
   },
   {
     "text": "النَّظافةُ من الإيمانِِ",
-    "grade_raw": "رفعه إلى النبي صلى الله عليه وسلم ليس بصحيح",
-    "graded_by": "ابن باز",
+    "grade_raw": "ضعيف لا يصح",
+    "graded_by": "ابن عثيمين",
     "source": {
-      "book": "الفوائد العلمية من الدروس البازية",
-      "ref": "6/113"
+      "book": "فتاوى نور على الدرب لابن عثيمين",
+      "ref": "2/537"
     },
-    "takhrij": null,
+    "takhrij": "أخرجه الطبراني في الأوسط (7311)، وأبو نعيم في تاريخ أصبهان (1/ 224)، وابن الفاخر في موجبات الجنة (42) بنحوه تامًا",
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
+    "note": "يعني حديث: تخلَّلوا فإنَّه نظافةٌ والنَّظافةُ تدعو إلى الإيمانِ والإيمانُ مع صاحبِه في الجنَّةِ",
+    "reviewed": true,
     "id": "H010",
-    "grade_class": "detailed",
-    "note": null,
+    "grade_class": "not_authentic",
     "url": null
   },
   {
@@ -193,40 +194,6 @@
     "file": "ahadith_la_tasih.docx",
     "id": "H011",
     "grade_class": "not_authentic",
-    "note": null,
-    "url": null
-  },
-  {
-    "text": "الدِّينُ حُسنُ المعاملةِ، أو الدِّينُ المعاملةُ",
-    "grade_raw": "ليس بحديث، فهذا لا أصل له، ولكن هو صحيح من حيث المعنى، وليس بحديث",
-    "graded_by": "ابن باز",
-    "source": {
-      "book": "الفوائد العلمية من الدروس البازية",
-      "ref": "2/161"
-    },
-    "takhrij": null,
-    "narrator": null,
-    "alternative": null,
-    "file": "ahadith_la_tasih.docx",
-    "id": "H012",
-    "grade_class": "detailed",
-    "note": null,
-    "url": null
-  },
-  {
-    "text": "الجزاءُ من جنسِ العملِ",
-    "grade_raw": "لم يرد بهذا اللفظ",
-    "graded_by": "محمد جار الله الصعدي",
-    "source": {
-      "book": "النوافح العطرة",
-      "ref": "115"
-    },
-    "takhrij": null,
-    "narrator": null,
-    "alternative": null,
-    "file": "ahadith_la_tasih.docx",
-    "id": "H013",
-    "grade_class": "detailed",
     "note": null,
     "url": null
   },
@@ -252,13 +219,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H014",
+    "id": "H012",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H014-ALT",
+    "id": "H012-ALT",
     "text": "جاءَ سُراقةُ بنُ مالِكِ بنِ جُعشُمٍ، قال: يا رَسولَ اللهِ، بَيِّنْ لَنا دينَنا كَأنَّا خُلِقنا الآنَ، فيما العَمَلُ اليَومَ؟ أفيما جَفَّت به الأقلامُ وجَرَت به المَقاديرُ، أم فيما نَستَقبِلُ؟ قال: لا، بَل فيما جَفَّت به الأقلامُ وجَرَت به المَقاديرُ، قال: ففيمَ العَمَلُ؟ قال زُهَيرٌ: ثُمَّ تَكَلَّمَ أبو الزُّبَيرِ بشَيءٍ لم أفهَمْه، فسَألتُ: ما قال؟ فقال: اعمَلوا؛ فكُلٌّ مُيَسَّرٌ.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -296,13 +263,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H016",
+    "id": "H014",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H016-ALT",
+    "id": "H014-ALT",
     "text": "ألكَ والدانِ ؟ قال : نعَم ، قال : الزَمهُما فإنَّ الجنَّةَ تحتَ أرجلِهما",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -330,7 +297,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H018",
+    "id": "H016",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -347,7 +314,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H019",
+    "id": "H017",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -364,7 +331,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H020",
+    "id": "H018",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -391,13 +358,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H021",
+    "id": "H019",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H021-ALT",
+    "id": "H019-ALT",
     "text": "ارحموا تُرْحَمُوا ، واغفِروا يُغْفَرْ لكُم",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -435,13 +402,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H023",
+    "id": "H021",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H023-ALT",
+    "id": "H021-ALT",
     "text": "ألا أدلُّكَ على أبوابِ الخيرِ ؟ . قلتُ : بلَى يا رسولَ اللهِ ! قال : الصَّومُ جُنَّةٌ ، و الصَّدقةُ تُطْفِئُ الخطيئةَ كما يُطْفِئُ الماءُ النَّارَ",
     "grade_raw": "صحيح لغيره",
     "grade_class": "authentic",
@@ -469,7 +436,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H025",
+    "id": "H023",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -486,7 +453,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H026",
+    "id": "H024",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -513,13 +480,14 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H027",
+    "note": "أصل الحديث صحيح، والزيادة فقط لا يصح رفعها، والبديل هو الحديث الصحيح بدون الزيادة",
+    "reviewed": true,
+    "id": "H025",
     "grade_class": "detailed",
-    "note": null,
     "url": null
   },
   {
-    "id": "H027-ALT",
+    "id": "H025-ALT",
     "text": "خَيرُكُم مَن تَعَلَّمَ القُرآنَ وعَلَّمَه. قال: وأقرَأ أبو عبدِ الرَّحمَنِ في إمرةِ عُثمانَ، حتَّى كان الحَجَّاجُ قال: وذاك الذي أقعَدَني مَقعَدي هذا.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -557,13 +525,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H029",
+    "id": "H027",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H029-ALT",
+    "id": "H027-ALT",
     "text": "خيرُ يومٍ طلعَت علَيهِ الشَّمسُ : يومُ الجمُعةِ فيهِ خُلِقَ آدمُ وفيهِ أُهْبِطَ وفيهِ مات ، وفيه تيبَ علَيهِ وفيهِ تقومُ السَّاعةُ وما من دابَّة إلَّا وَهي مُصيخَةٌ يومَ الجمُعةِ من حينِ تصبحُ حتَّى تطلعَ الشَّمسُ شفَقًا منَ السَّاعةِ إلَّا الجنَّ والإنسَ وفيه ساعةٌ لا يصادِفُها عبدٌ مسلمٌ وَهوَ يصلِّي ، يسألُ اللَّهَ شيئًا إلَّا أعطاهُ إيَّاهُ",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -591,7 +559,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H031",
+    "id": "H029",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -618,13 +586,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H032",
+    "id": "H030",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H032-ALT",
+    "id": "H030-ALT",
     "text": "ما مِن عَبدٍ مُسلِمٍ يَدعو لأخيه بظَهرِ الغَيبِ، إلَّا قال المَلَكُ: ولَكَ بمِثلٍ.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -662,13 +630,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H034",
+    "id": "H032",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H034-ALT",
+    "id": "H032-ALT",
     "text": "أُمَّكَ ، ثمَّ أُمَّكَ ، ثُمَّ أُمَّكَ ، ثُمَّ أباكَ ، ثُمَّ الأقربُونَ فالأقربُونَ",
     "grade_raw": "حسن",
     "grade_class": "authentic",
@@ -696,7 +664,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H036",
+    "id": "H034",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -713,7 +681,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H037",
+    "id": "H035",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -730,7 +698,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H038",
+    "id": "H036",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -757,13 +725,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H039",
+    "id": "H037",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H039-ALT",
+    "id": "H037-ALT",
     "text": "إذا مات صاحبُكم فدَعُوه لا تقعوا فيه",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -801,13 +769,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H041",
+    "id": "H039",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H041-ALT",
+    "id": "H039-ALT",
     "text": "لا تَستبطِئُوا الرِّزقَ ، فإنَّهُ لمْ يكنْ عبدٌ لِيموتَ حتى يَبلُغَهُ آخِرُ رِزقٍ هوَ لهُ ، فاتَّقُوا اللهَ ، وأجْملُوا في الطَّلَبِ ، أخذُ الحلالِ ، وتركُ الحرامِ",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -835,7 +803,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H043",
+    "id": "H041",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -852,7 +820,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H044",
+    "id": "H042",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -869,7 +837,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H045",
+    "id": "H043",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -896,13 +864,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H046",
+    "id": "H044",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H046-ALT",
+    "id": "H044-ALT",
     "text": "سَيِّدُ الاستِغفارِ: اللهُمَّ أنتَ رَبِّي، لا إلَهَ إلَّا أنتَ، خَلَقتَني وأنا عَبدُك، وأنا على عَهدِك ووَعدِك ما استَطَعتُ، أبوءُ لك بنِعمَتِك عليَّ، وأبوءُ لك بذَنبي، فاغفِرْ لي؛ فإنَّه لا يَغفِرُ الذُّنوبَ إلَّا أنتَ، أعوذُ بك مِن شَرِّ ما صَنَعتُ. إذا قال حينَ يُمسي فماتَ دَخَلَ الجَنَّةَ -أو: كان مِن أهلِ الجَنَّةِ-، وإذا قال حينَ يُصبِحُ فماتَ مِن يَومِه مِثلَه.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -940,13 +908,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H048",
+    "id": "H046",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H048-ALT",
+    "id": "H046-ALT",
     "text": "أوصيكُم بالسَّمعِ والطَّاعةِ ، فإنَّهُ مَن يعِشْ منكُم بَعدي فسيَرى اختلافًا كثيرًا، فعَليكم بِسنَّتي وسنَّةِ الخلفاءِ الرَّاشدينَ المَهْديِّينَ مِن بَعدي تَمسَّكوا بِها ( وعضُّوا علَيها ) بالنَّواجذِ، وإيَّاكم ومُحدَثاتِ الأمورِ ، فإنَّ كلَّ بدعةٍ ضلالَه",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -974,7 +942,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H050",
+    "id": "H048",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -1001,13 +969,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H051",
+    "id": "H049",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H051-ALT",
+    "id": "H049-ALT",
     "text": "مَن كان يُؤمِنُ باللهِ واليَومِ الآخِرِ فليُكرِمْ ضَيفَه، جائِزَتُه يَومٌ ولَيلةٌ، والضِّيافةُ ثَلاثةُ أيَّامٍ، فما بَعدَ ذلك فهو صَدَقةٌ، ولا يَحِلُّ له أن يَثويَ عِندَه حتَّى يُحرِجَه، حَدَّثَنا إسماعيلُ، قال: حدَّثَني مالِكٌ: مِثلَه، وزادَ: مَن كان يُؤمِنُ باللهِ واليَومِ الآخِرِ فليَقُلْ خَيرًا أو ليَصمُتْ.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1035,7 +1003,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H053",
+    "id": "H051",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -1052,7 +1020,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H054",
+    "id": "H052",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
@@ -1079,13 +1047,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H055",
+    "id": "H053",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H055-ALT",
+    "id": "H053-ALT",
     "text": "اجتَنِبوا السَّبعَ الموبِقاتِ، قالوا: يا رَسولَ اللهِ، وما هُنَّ؟ قال: الشِّركُ باللهِ، والسِّحرُ، وقَتلُ النَّفسِ التي حَرَّمَ اللهُ إلَّا بالحَقِّ، وأكلُ الرِّبا، وأكلُ مالِ اليَتيمِ، والتَّولِّي يَومَ الزَّحفِ، وقَذفُ المُحصَناتِ المُؤمِناتِ الغافِلاتِ.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1113,7 +1081,7 @@
     "narrator": null,
     "alternative": null,
     "file": "ahadith_la_tasih.docx",
-    "id": "H057",
+    "id": "H055",
     "grade_class": "weak",
     "note": null,
     "url": null
@@ -1140,13 +1108,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H058",
+    "id": "H056",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H058-ALT",
+    "id": "H056-ALT",
     "text": "إنَّ الدِّينَ يُسرٌ، ولَن يُشادَّ الدِّينَ أحَدٌ إلَّا غَلَبَه، فسَدِّدوا وقارِبوا، وأبشِروا، واستَعينوا بالغَدوةِ والرَّوحةِ وشيءٍ مِنَ الدُّلجةِ.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1184,13 +1152,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H060",
+    "id": "H058",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H060-ALT",
+    "id": "H058-ALT",
     "text": "يؤمُّ القومَ أقرؤُهم لِكتابِ اللَّهِ فإن كانوا في القراءةِ سواءً فأقدمُهم في الهِجرةِ فإن كانوا في الهِجرةِ سواءً فأعلمُهم بالسُّنَّةِ فإن كانوا في السُّنَّةِ سواءً فأقدمُهم سِنًّا ولا تؤمَّ الرَّجلَ في سلطانِهِ ولا تقعُدْ على تَكرِمتِهِ إلَّا أن يأذنَ لَك",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1228,13 +1196,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H062",
+    "id": "H060",
     "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H062-ALT",
+    "id": "H060-ALT",
     "text": "إنِّي لا أُصافِحُ النِّساءَ ، إِنَّما قَوْلِي لمائَةِ امرأةٍ كَقَوْلِي لِامرأةٍ واحدةٍ",
     "grade_raw": "إسناده صحيح",
     "grade_class": "authentic",
@@ -1252,7 +1220,7 @@
   },
   {
     "text": "من تزوَّج امرأةً لعِزِّها لم يزِدْه اللهُ عزَّ وجلَّ إلَّا ذُلًّا، ومن تزوَّج امرأةً لمالِها لم يزِدْه اللهُ إلَّا فقرًا، ومن تزوَّج امرأةً لحُسنِها لم يزِدْه اللهُ إلَّا دناءةً، ومن تزوَّج امرأةً لم يتزوَّجْها إلَّا ليغُضَّ بصرَه أو يُحصِّنَ فرْجَه أو يصِلَ رحِمَه بارك اللهُ له فيها وبارك لها فيه",
-    "grade_raw": "موصوع",
+    "grade_raw": "موضوع",
     "graded_by": "ابن الجوزي",
     "source": {
       "book": "الموضوعات لابن الجوزي",
@@ -1272,13 +1240,14 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H064",
-    "grade_class": "unknown",
+    "reviewed": true,
+    "id": "H062",
+    "grade_class": "not_authentic",
     "note": null,
     "url": null
   },
   {
-    "id": "H064-ALT",
+    "id": "H062-ALT",
     "text": "تُنكَحُ المَرأةُ لأربَعٍ: لمالِها، ولِحَسَبِها، وجَمالِها، ولِدينِها؛ فاظفَرْ بذاتِ الدِّينِ تَرِبَت يَداك.",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1316,13 +1285,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H066",
+    "id": "H064",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H066-ALT",
+    "id": "H064-ALT",
     "text": "يقولُ اللهُ : أنا عند ظنِّ عبدِي بِي ، وأنا مَعَه إذا ذكرَنِي ، فإنْ ذكرَنِي في نفسِه ذكرتُه في نفسِي ، وإنْ ذكرَنِي في ملأٍ ذكرتُه في ملأٍ خيرٍ مِنهم ، وإنْ تقرَّبَ إليَّ شِبرًا تقرَّبْتُ إليِه ذِراعًا ، وإنْ تقرَّبَ إليَّ ذِراعًا تقرَّبتُ إليِه باعًا ، وإنْ أتانِي يمشِي أتيتُه هرولةً . قال قتادةُ واللهُ أسرعُ بالمغفرةِ",
     "grade_raw": "صحيح",
     "grade_class": "authentic",
@@ -1360,13 +1329,13 @@
       "url": null
     },
     "file": "ahadith_la_tasih.docx",
-    "id": "H068",
+    "id": "H066",
     "grade_class": "weak",
     "note": null,
     "url": null
   },
   {
-    "id": "H068-ALT",
+    "id": "H066-ALT",
     "text": "عنِ الحَكَمِ قال: أرسَل إليَّ مجاهدٌ وعَبْدَةُ بنُ أبي لُبَابةَ: إنَّا نُريدُ أن نختِمَ القُرْآنَ، وكان يُقالُ: إنَّ الدُّعاءَ يُستجابُ عندَ خَتْمِ القُرْآنِ.",
     "grade_raw": "موقوف صحيح",
     "grade_class": "authentic",
@@ -1394,7 +1363,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H070",
+    "id": "H068",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1411,7 +1380,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H071",
+    "id": "H069",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1428,7 +1397,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H072",
+    "id": "H070",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1445,7 +1414,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H073",
+    "id": "H071",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1462,7 +1431,7 @@
     "narrator": "عبدالله ابن عباس",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H074",
+    "id": "H072",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1479,7 +1448,7 @@
     "narrator": "عمر بن خطاب",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H075",
+    "id": "H073",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1496,7 +1465,7 @@
     "narrator": "جرير بن عبد الله",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H076",
+    "id": "H074",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1513,7 +1482,7 @@
     "narrator": "أبو مالك الأشعري",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H077",
+    "id": "H075",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1530,7 +1499,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H078",
+    "id": "H076",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1547,7 +1516,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H079",
+    "id": "H077",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1564,7 +1533,7 @@
     "narrator": "تميم الداري",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H080",
+    "id": "H078",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1581,7 +1550,7 @@
     "narrator": "عبدالله بن مسعود",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H081",
+    "id": "H079",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1598,7 +1567,7 @@
     "narrator": "عبدالله بن عمرو",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H082",
+    "id": "H080",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1615,7 +1584,7 @@
     "narrator": "أبو مسعود عقبة بن عمرو",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H083",
+    "id": "H081",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1632,7 +1601,7 @@
     "narrator": "أبو أمامة الباهلي",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H084",
+    "id": "H082",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1649,7 +1618,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H085",
+    "id": "H083",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1666,7 +1635,7 @@
     "narrator": "أبو سعيد الخدري",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H086",
+    "id": "H084",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1683,7 +1652,7 @@
     "narrator": "أبو امامة الباهلي",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H087",
+    "id": "H085",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1700,7 +1669,7 @@
     "narrator": "أبو الدرداء",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H088",
+    "id": "H086",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1717,7 +1686,7 @@
     "narrator": "عبدالله بن مسعود",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H089",
+    "id": "H087",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1734,7 +1703,7 @@
     "narrator": "بريدة بن الحصيب الأسلمي]",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H090",
+    "id": "H088",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1751,7 +1720,7 @@
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H091",
+    "id": "H089",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1768,24 +1737,25 @@
     "narrator": "ابي هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H092",
+    "id": "H090",
     "grade_class": "authentic",
     "note": null,
     "url": null
   },
   {
     "text": "أكمَلُ المؤمنين إيمانًا أحسَنُهم خُلقًا",
-    "grade_raw": "أخرجه في صحيحه",
-    "graded_by": "ابن حبان",
+    "grade_raw": "صحيح",
+    "graded_by": "الألباني",
     "source": {
-      "book": "صحيح ابن حبان",
-      "ref": "479"
+      "book": "الإيمان لابن أبي شيبة",
+      "ref": "17"
     },
-    "takhrij": "). أخرجه أبو داود (4682)، وأخرجه الترمذي (1162)، وأحمد (7402) مطولاً",
+    "takhrij": "أخرجه أبو داود (4682)، والترمذي (1162)، وأحمد (2/ 527)",
     "narrator": "أبو هريرة",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H093",
+    "reviewed": true,
+    "id": "H091",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1802,7 +1772,7 @@
     "narrator": "أبو الدرداء",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H094",
+    "id": "H092",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1819,7 +1789,7 @@
     "narrator": "أبو ذر الغفاري",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H095",
+    "id": "H093",
     "grade_class": "authentic",
     "note": null,
     "url": null
@@ -1836,9 +1806,99 @@
     "narrator": "عبدالله بن عباس",
     "alternative": null,
     "file": "ahadith_sahiha.docx",
-    "id": "H096",
+    "id": "H094",
     "grade_class": "authentic",
     "note": null,
     "url": null
+  },
+  {
+    "takhrij": "أخرجه الخطيب في تاريخ بغداد (13/ 280)",
+    "narrator": null,
+    "alternative": {
+      "text": "أنَّ النَّبيَّ صلَّى اللهُ عليه وسلَّم دَخَلَ على أعرابيٍّ يَعودُه، قال: وكان النَّبيُّ صلَّى اللهُ عليه وسلَّم إذا دَخَلَ على مَريضٍ يَعودُه، قال: لا بَأسَ، طَهورٌ إن شاءَ اللهُ، فقال له: لا بَأسَ، طَهورٌ إن شاءَ اللهُ، قال: قُلتَ: طَهورٌ؟ كَلَّا، بَل هي حُمَّى تَفورُ -أو تَثورُ- على شَيخٍ كَبيرٍ، تُزيرُه القُبورَ، فقال النَّبيُّ صلَّى اللهُ عليه وسلَّم: فنَعَم إذَنْ.",
+      "grade_raw": "صحيح",
+      "graded_by": "البخاري",
+      "narrator": null,
+      "source": {
+        "book": "صحيح البخاري",
+        "ref": "3616"
+      },
+      "url": null
+    },
+    "text": "البلاءُ موكَّلٌ بالمنطقِ، فلو أنَّ رجلًا عيَّر رجلًا برضاعِ كلبةٍ لرضَعها",
+    "grade_raw": "لا يصح",
+    "graded_by": "ابن الجوزي",
+    "source": {
+      "book": "الموضوعات لابن الجوزي",
+      "ref": "3/279"
+    },
+    "file": "corrections.json",
+    "reviewed": true,
+    "id": "H095",
+    "grade_class": "not_authentic",
+    "note": null,
+    "url": null
+  },
+  {
+    "id": "H095-ALT",
+    "text": "أنَّ النَّبيَّ صلَّى اللهُ عليه وسلَّم دَخَلَ على أعرابيٍّ يَعودُه، قال: وكان النَّبيُّ صلَّى اللهُ عليه وسلَّم إذا دَخَلَ على مَريضٍ يَعودُه، قال: لا بَأسَ، طَهورٌ إن شاءَ اللهُ، فقال له: لا بَأسَ، طَهورٌ إن شاءَ اللهُ، قال: قُلتَ: طَهورٌ؟ كَلَّا، بَل هي حُمَّى تَفورُ -أو تَثورُ- على شَيخٍ كَبيرٍ، تُزيرُه القُبورَ، فقال النَّبيُّ صلَّى اللهُ عليه وسلَّم: فنَعَم إذَنْ.",
+    "grade_raw": "صحيح",
+    "grade_class": "authentic",
+    "graded_by": "البخاري",
+    "source": {
+      "book": "صحيح البخاري",
+      "ref": "3616"
+    },
+    "takhrij": null,
+    "narrator": null,
+    "alternative": null,
+    "note": null,
+    "url": null,
+    "file": "corrections.json"
+  },
+  {
+    "takhrij": "أخرجه أبو داود (2178)، وابن ماجه (2018) باختلاف يسير",
+    "narrator": null,
+    "alternative": {
+      "text": "إنَّ إبليسَ يَضَعُ عَرشَه على الماءِ، ثُمَّ يَبعَثُ سَراياه، فأدناهم منه مَنزِلةً أعظَمُهم فِتنةً، يَجيءُ أحَدُهم فيَقولُ: فعَلتُ كَذا وكَذا، فيَقولُ: ما صَنَعتَ شيئًا، قال: ثُمَّ يَجيءُ أحَدُهم فيَقولُ: ما تَرَكتُه حتَّى فرَّقتُ بينَه وبينَ امرَأتِه، قال: فيُدنيه منه ويقولُ: نِعمَ أنتَ.",
+      "grade_raw": "صحيح",
+      "graded_by": "مسلم",
+      "narrator": null,
+      "source": {
+        "book": "صحيح مسلم",
+        "ref": "2813"
+      },
+      "url": null
+    },
+    "text": "إنَّ أبغضَ الحلالِ إلى اللَّهِ عزَّ وجلَّ الطَّلاقُ",
+    "grade_raw": "لا يصح",
+    "graded_by": "ابن الجوزي",
+    "source": {
+      "book": "العلل المتناهية",
+      "ref": "2/638"
+    },
+    "file": "corrections.json",
+    "reviewed": true,
+    "id": "H097",
+    "grade_class": "not_authentic",
+    "note": null,
+    "url": null
+  },
+  {
+    "id": "H097-ALT",
+    "text": "إنَّ إبليسَ يَضَعُ عَرشَه على الماءِ، ثُمَّ يَبعَثُ سَراياه، فأدناهم منه مَنزِلةً أعظَمُهم فِتنةً، يَجيءُ أحَدُهم فيَقولُ: فعَلتُ كَذا وكَذا، فيَقولُ: ما صَنَعتَ شيئًا، قال: ثُمَّ يَجيءُ أحَدُهم فيَقولُ: ما تَرَكتُه حتَّى فرَّقتُ بينَه وبينَ امرَأتِه، قال: فيُدنيه منه ويقولُ: نِعمَ أنتَ.",
+    "grade_raw": "صحيح",
+    "grade_class": "authentic",
+    "graded_by": "مسلم",
+    "source": {
+      "book": "صحيح مسلم",
+      "ref": "2813"
+    },
+    "takhrij": null,
+    "narrator": null,
+    "alternative": null,
+    "note": null,
+    "url": null,
+    "file": "corrections.json"
   }
 ]

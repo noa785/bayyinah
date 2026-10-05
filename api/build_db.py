@@ -151,10 +151,36 @@ def read_docx(path: Path, review: list):
     return rows
 
 
+def apply_corrections(rows, review, path="data/corrections.json"):
+    """يطبق مراجعات المتخصصة الشرعية على البيانات، والملفات الأصلية تبقى كما هي."""
+    f = Path(path)
+    if not f.exists():
+        return rows
+    fixes = json.loads(f.read_text(encoding="utf-8"))
+    removes = [normalize(r["starts_with"]) for r in fixes.get("remove", [])]
+    out = []
+    for rec in rows:
+        key = normalize(rec["text"])
+        if any(key.startswith(r) for r in removes):
+            review.append(f"انحذف بقرار المراجعة الشرعية: {rec['text'][:60]}")
+            continue
+        for u in fixes.get("update", []):
+            if key.startswith(normalize(u["starts_with"])):
+                rec.update(u["set"])
+                rec["reviewed"] = True
+        out.append(rec)
+    # أحاديث جديدة أضافتها المتخصصة الشرعية بعد المراجعة
+    for a in fixes.get("add", []):
+        rec = {"takhrij": None, "narrator": None, "alternative": None, **a, "file": "corrections.json", "reviewed": True}
+        out.append(rec)
+    return out
+
+
 def main(paths):
     review, all_rows = [], []
     for p in paths:
         all_rows.extend(read_docx(Path(p), review))
+    all_rows = apply_corrections(all_rows, review)
 
     db, seen = [], set()
     for rec in all_rows:
@@ -165,9 +191,9 @@ def main(paths):
         seen.add(key)
         rec["id"] = f"H{len(db) + 1:03d}"
         rec["grade_class"] = grade_class(rec["grade_raw"])
-        rec["note"] = None
+        rec["note"] = rec.get("note")
         rec["url"] = None
-        if rec["grade_class"] in ("unknown", "detailed"):
+        if rec["grade_class"] in ("unknown", "detailed") and not rec.get("reviewed"):
             review.append(f"{rec['id']} الحكم يحتاج تأكيد ({rec['grade_raw']}): {rec['text'][:60]}")
         db.append(rec)
 
