@@ -517,8 +517,8 @@ function renderFields() {
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === S.tab));
   moveInd();
   if (S.tab === "audio" || S.tab === "video") {
-    const fmt = S.tab === "audio" ? "MP3 أو WAV أو M4A أو OGG" : "MP4 أو MOV أو WEBM";
-    const acc = S.tab === "audio" ? "audio/*,.mp3,.wav,.m4a,.ogg,.opus" : "video/*,.mp4,.mov,.webm";
+    const fmt = S.tab === "audio" ? "MP3 أو WAV أو M4A أو MP4، ومقاطع الواتساب الصوتية" : "MP4 أو MOV أو WEBM";
+    const acc = "audio/*,video/*,.mp3,.wav,.m4a,.ogg,.opus,.aac,.amr,.mp4,.mov,.webm,.3gp";
     f.innerHTML = `
       <label class="drop" id="drop" tabindex="0">
         <input type="file" id="file" accept="${acc}" hidden>
@@ -552,7 +552,7 @@ function renderFields() {
 
 function pickFile(f) {
   if (!f) return;
-  const ok = /^(audio|video)\//.test(f.type) || /\.(mp3|wav|m4a|ogg|opus|mp4|mov|webm)$/i.test(f.name);
+  const ok = /^(audio|video)\//.test(f.type) || /\.(mp3|wav|m4a|ogg|opus|aac|amr|mp4|mov|webm|3gp)$/i.test(f.name);
   if (!ok) return formErr("صيغة الملف غير مدعومة. استخدم MP3 أو WAV أو M4A أو MP4.");
   if (f.size > MAX_MB * 1048576) return formErr(`حجم الملف أكبر من ${toAr(MAX_MB)} ميقابايت.`);
   formErr("");
