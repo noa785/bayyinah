@@ -75,6 +75,8 @@ def decide(content, auth, duration, prov=None, original=None):
 
     # 3. حكم غير مصنف في القاعدة: نمتنع
     if any(c == "unknown" for c in classes):
+        if any(c.get("kind") == "dorar" for c in matched):
+            return ("undetermined", "أحكام المحدثين في الموسوعة الحديثية على هذه الرواية تحتاج نظر المختص", "unknown_grade", DISCLAIMER)
         return ("undetermined", "حكم الحديث في القاعدة يحتاج مراجعة المختص", "unknown_grade", DISCLAIMER)
 
     # 4. ما لقينا شي في القاعدة: نمتنع
