@@ -19,7 +19,24 @@ def normalize(text: str) -> str:
     t = t.replace("ة", "ه")
     t = t.replace("ؤ", "و").replace("ئ", "ي")
     t = NON_ARABIC.sub(" ", t)
-    return SPACES.sub(" ", t).strip()
+    return _join_fragments(SPACES.sub(" ", t).strip())
+
+
+# سوابق ما تجي كلمة لحالها، فإذا انفصلت بمسافة بالغلط نرجعها للكلمة اللي بعدها
+# مثل «فل يكرم» إلى «فليكرم»، و«و الله» إلى «والله»
+FRAGMENTS = {"و", "ف", "ب", "ل", "ك", "ال", "لل", "فل", "ول", "وال", "فال", "بال", "كال", "وب", "فب", "وك", "فك"}
+
+
+def _join_fragments(t: str) -> str:
+    words, out, i = t.split(), [], 0
+    while i < len(words):
+        w = words[i]
+        if w in FRAGMENTS and i + 1 < len(words):
+            words[i + 1] = w + words[i + 1]
+        else:
+            out.append(w)
+        i += 1
+    return " ".join(out)
 
 
 SENTENCE_SPLIT = re.compile(r"[.!?؟،,;؛:\n«»\"]+")
