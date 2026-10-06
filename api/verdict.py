@@ -36,6 +36,10 @@ def decide(content, auth, duration):
             what = "الحديث الوارد في المقطع لا يثبت بهذا اللفظ أو النسبة، وفي الحكم تفصيل"
         return ("contradicted", what, None, DISCLAIMER)
 
+    # 3أ. اختلف المحدثون في الحكم على الحديث: نعرض أقوالهم ونحيل للمختص
+    if any(c == "mixed" for c in classes):
+        return ("undetermined", "اختلفت أحكام المحدثين في الحديث الوارد، ويُحال إلى المختص", "mixed_grades", DISCLAIMER)
+
     # 3. حكم غير مصنف في القاعدة: نمتنع
     if any(c == "unknown" for c in classes):
         return ("undetermined", "حكم الحديث في القاعدة يحتاج مراجعة المختص", "unknown_grade", DISCLAIMER)

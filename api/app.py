@@ -17,6 +17,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from audio import AudioError, authenticity, load_audio, transcribe
+import dorar
 from engine import HadithEngine
 from verdict import TITLES, content_block, decide
 
@@ -172,6 +173,13 @@ async def analyze(
         ctx_claims = engine.find_claims(context.strip(), kind=kind)
         if any(c["matched"] for c in ctx_claims):
             claims = ctx_claims
+    # ما لقيناه في قاعدتنا ولا في القرآن: نبحث في الموسوعة الحديثية بالدرر السنية
+    if kind != "quran" and not any(c["matched"] for c in claims):
+        for q in dict.fromkeys(x for x in (transcript, (context or "").strip()) if x and len(x) >= 8):
+            found = await run_in_threadpool(dorar.lookup, q)
+            if found:
+                claims = [found]
+                break
     evidence["content"] = content_block(claims)
     verdict, summary, abstain, disclaimer = decide(evidence["content"], evidence["authenticity"], duration)
 
