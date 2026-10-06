@@ -174,6 +174,40 @@ def tidy(rec):
         rec["source"]["book"] = tidy_name(rec["source"]["book"])
 
 
+ALT_RE = re.compile(r"^(.*?)\s*\(\s*([^،()]+)،\s*(.+?)\s+([\d/٠-٩]+)\s*\)\s*$")
+
+
+def read_xlsx(path: Path, review: list):
+    """يقرأ جدول المراجعة الشرعية، ويدخل فقط الصفوف اللي اعتمدتها المتخصصة."""
+    from openpyxl import load_workbook
+    wb = load_workbook(path, data_only=True)
+    rows = []
+    for ws in wb.worksheets:
+        head = [str(c.value or "").strip() for c in ws[1]]
+        if "النص المنتشر" not in head or "قرارك" not in head:
+            continue
+        col = {h: i for i, h in enumerate(head)}
+        for r in ws.iter_rows(min_row=2, values_only=True):
+            g = lambda h: clean(str(r[col[h]] or "")).strip() if h in col else ""
+            if g("قرارك") != "اعتماد" or not g("النص المنتشر"):
+                continue
+            alt, raw = None, g("البديل الصحيح")
+            if raw:
+                m = ALT_RE.match(raw)
+                if m:
+                    alt = {"text": m.group(1), "grade_raw": m.group(2), "graded_by": None, "narrator": None,
+                           "source": {"book": m.group(3), "ref": m.group(4)}, "url": None}
+                else:
+                    review.append(f"[{path.name}] البديل ما انقرأ، تأكدي من صيغته: {raw[:60]}")
+            rows.append({
+                "text": g("النص المنتشر"), "grade_raw": g("نوعه"), "graded_by": g("من حكم عليه") or None,
+                "source": {"book": g("المصدر") or None, "ref": g("الرقم أو الصفحة") or None},
+                "takhrij": None, "narrator": None, "alternative": alt, "note": None,
+                "file": path.name, "reviewed": True,
+            })
+    return rows
+
+
 def apply_corrections(rows, review, path="data/corrections.json"):
     """يطبق مراجعات المتخصصة الشرعية على البيانات، والملفات الأصلية تبقى كما هي."""
     f = Path(path)
@@ -202,7 +236,7 @@ def apply_corrections(rows, review, path="data/corrections.json"):
 def main(paths):
     review, all_rows = [], []
     for p in paths:
-        all_rows.extend(read_docx(Path(p), review))
+        all_rows.extend(read_xlsx(Path(p), review) if str(p).endswith(".xlsx") else read_docx(Path(p), review))
     all_rows = apply_corrections(all_rows, review)
     for rec in all_rows:
         tidy(rec)

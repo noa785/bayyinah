@@ -33,6 +33,34 @@ def _in_order(query_words, hadith_words):
     return True
 
 
+def _cov(a, b):
+    """نسبة كلمات a الموجودة في b مع التسامح بحرف."""
+    if not a:
+        return 0.0
+    return sum(1 for w in a if any(_eq(w, x) for x in b)) / len(a)
+
+
+def _eq(a, b):
+    """نفس الكلمة مع التسامح بحرف، ومع واو أو فاء العطف في أولها (خير ووخير)."""
+    if _close(a, b):
+        return True
+    if b[:1] in "وف" and len(b) > 3 and _close(a, b[1:]):
+        return True
+    return a[:1] in "وف" and len(a) > 3 and _close(a[1:], b)
+
+
+# كلمات وظيفية تتكرر في كل نص، ما نحسبها في بوابة الكلمات
+FUNC = set("الا اذا كل بعد قبل حتى انما لما له لها لهم به بها فيه هو هي ان قد ثم او الي علي عن مع".split())
+
+
+def _word_gate(query_content, hadith_content, need=0.7):
+    q = list(dict.fromkeys(w for w in query_content if w not in FUNC))
+    h = list(dict.fromkeys(w for w in hadith_content if w not in FUNC))
+    if not q or not h:
+        return False
+    return max(_cov(q, h), _cov(h, q)) >= need
+
+
 class HadithEngine:
     def __init__(self, path="data/hadiths.json"):
         self.db = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -75,14 +103,19 @@ class HadithEngine:
                 qcont = sum(1 for w in content if w in hset) / len(content)
                 if qcont >= 0.85 and _in_order(content, hw):
                     score = max(score, 0.6 + 0.24 * qcont)  # تطلع "partial" لأنها جزء من الحديث
+            # بوابة الكلمات: لازم أغلب كلمات الحديث موجودة في الكلام، أو أغلب كلمات الكلام موجودة في الحديث.
+            # تمنع إن «الحياء من الإيمان» ينطابق مع «النظافة من الإيمان» بسبب كلمة مشتركة
+            if not _word_gate(content, [w for w in self.norm[idx].split() if w not in STOP]):
+                score = 0.0
             results.append((score, idx))
         results.sort(reverse=True)
         return results[:top_k]
 
-    def find_claims(self, text, max_claims=5):
+    def find_claims(self, text, max_claims=5, kind="auto"):
         """يطلع كل الأحاديث الموجودة في النص، ولو ما لقى شي يرجع النص كادعاء غير موجود."""
         best = {}
-        for seg in candidate_segments(text):
+        # kind: "hadith" يبحث في الأحاديث بس، "quran" في القرآن بس، "auto" في الاثنين
+        for seg in (candidate_segments(text) if kind != "quran" else []):
             # المقاطع القصيرة جدا (كلمتين) نطلب لها تطابق أعلى عشان ما تطلع نتائج غلط
             limit = MIN_SCORE if len(normalize(seg).split()) >= 3 else 0.8
             hits = self.search(seg, top_k=1)
@@ -93,7 +126,7 @@ class HadithEngine:
             if hid not in best or score > best[hid][0]:
                 best[hid] = (score, seg)
 
-        if self.quran:
+        if self.quran and kind != "hadith":
             for seg in candidate_segments(text):
                 hit = self.quran.search(seg)
                 if hit:

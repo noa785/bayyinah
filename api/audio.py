@@ -12,6 +12,7 @@ import numpy as np
 SAMPLE_RATE = 16000
 MIN_SECONDS = 2.0        # أقصر من كذا ما نحلله
 SHORT_SECONDS = 6.0      # أقصر من كذا نعتبر فحص الأصالة غير كافي
+MAX_TRANSCRIBE_SECONDS = 90  # أطول من كذا نفرّغ أوله بس
 
 WHISPER_SIZE = os.getenv("WHISPER_SIZE", "base")
 DEEPFAKE_MODEL = os.getenv("DEEPFAKE_MODEL", "").strip()  # يتحدد يوم الاثنين بعد التجربة
@@ -58,7 +59,13 @@ def transcribe(wav):
         if _whisper is None:
             from faster_whisper import WhisperModel
             _whisper = WhisperModel(WHISPER_SIZE, device="cpu", compute_type="int8")
-        segments, _ = _whisper.transcribe(wav, language="ar", beam_size=1, vad_filter=False)
+        # نعطي النموذج سياق ديني قصير عشان يكتب المصطلحات صح.
+        # البحث الواسع (beam) يبطئ كثير على معالج الخادم المجاني، فنخليه 1
+        # ونفرّغ أول دقيقة ونص بس عشان ما يطول الانتظار
+        segments, _ = _whisper.transcribe(
+            wav[: SAMPLE_RATE * MAX_TRANSCRIBE_SECONDS], language="ar", beam_size=1, vad_filter=False,
+            initial_prompt="قال الله تعالى. قال رسول الله صلى الله عليه وسلم. حديث صحيح. آية من القرآن الكريم.",
+        )
         text = " ".join(s.text.strip() for s in segments).strip()
     except Exception:
         raise AudioError("transcription_failed", "تعذّر التفريغ النصي للمقطع.")

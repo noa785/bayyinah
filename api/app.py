@@ -6,6 +6,7 @@
 """
 
 import os
+import shutil
 import tempfile
 import time
 import uuid
@@ -13,6 +14,7 @@ import uuid
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 
 from audio import AudioError, authenticity, load_audio, transcribe
 from engine import HadithEngine
@@ -24,6 +26,35 @@ app = FastAPI(title="Bayyinah API", version="0.1")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 engine = HadithEngine()
+
+
+def download_audio(link):
+    """يحمّل صوت المقطع من الرابط. يرجع (المسار، المجلد المؤقت) أو يرمي خطأ إذا منعت المنصة التحميل."""
+    import yt_dlp
+    folder = tempfile.mkdtemp(prefix="bayyinah_")
+    opts = {
+        "format": "bestaudio/best", "outtmpl": os.path.join(folder, "clip.%(ext)s"),
+        "noplaylist": True, "quiet": True, "no_warnings": True, "socket_timeout": 20, "retries": 1, "extractor_retries": 1,
+        "max_filesize": MAX_MB * 1024 * 1024,
+        "match_filter": yt_dlp.utils.match_filter_func("!duration | duration <= 900"),
+    }
+    try:
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            ydl.download([link])
+        files = [f for f in os.listdir(folder) if not f.endswith(".part")]
+        if not files:
+            raise RuntimeError("no file")
+        return os.path.join(folder, files[0]), folder
+    except Exception:
+        shutil.rmtree(folder, ignore_errors=True)
+        raise
+
+
+MEDIA_EVIDENCE = {
+    "speaker_match": {"status": "no_reference", "label": "لا تتوفر عينة مرجعية لصوت المتحدث المنسوب إليه"},
+    "original_match": {"status": "not_found", "label": "أرشيف الدروس الأصلية قيد البناء، فلم تُجرَ المطابقة",
+                       "source": None, "before": None, "after": None},
+}
 
 
 def error(status, code, message):
@@ -45,6 +76,7 @@ NOT_APPLICABLE = {
 @app.post("/analyze")
 async def analyze(
     input_type: str = Form(...),
+    kind: str = Form("auto"),
     file: UploadFile | None = File(None),
     url: str | None = Form(None),
     text: str | None = Form(None),
@@ -64,12 +96,34 @@ async def analyze(
         if len(transcript) < 8:
             return error(422, "no_speech", "اكتب نصاً لا يقل عن ٨ أحرف.")
 
-    # ---------- الرابط: ما نحمل المقطع، نعتمد على النص اللي كتبه المستخدم ----------
+    # ---------- الرابط: نحاول نحمّل المقطع، وإذا منعت المنصة نعتمد على النص المكتوب ----------
     elif input_type == "url":
-        transcript = (context or "").strip()
-        if len(transcript) < 8:
-            return error(422, "no_speech", "التحليل من الرابط مباشرة غير متاح حالياً، أضف ما قيل في المقطع.")
-        evidence["authenticity"]["label"] = "لم يُحمَّل المقطع من الرابط، فلم يُجرَ الفحص التقني"
+        link = (url or "").strip()
+        wav, folder = None, None
+        if link.startswith(("http://", "https://")):
+            try:
+                path, folder = await run_in_threadpool(download_audio, link)
+                wav, duration = load_audio(path)
+            except Exception:
+                wav = None
+            finally:
+                if folder:
+                    shutil.rmtree(folder, ignore_errors=True)
+        transcript = ""
+        if wav is not None:
+            evidence["authenticity"] = authenticity(wav, duration)
+            evidence.update({k: dict(v) for k, v in MEDIA_EVIDENCE.items()})
+            try:
+                transcript = await run_in_threadpool(transcribe, wav)
+            except AudioError:
+                transcript = ""
+        if not transcript:
+            transcript = (context or "").strip()
+            if len(transcript) < 8:
+                return error(422, "download_failed",
+                             "تعذّر تحميل المقطع من هذا الرابط، فبعض المنصات تمنع التحميل. اكتب ما قيل في المقطع في الخانة وأعد المحاولة.")
+            if wav is None:
+                evidence["authenticity"]["label"] = "تعذّر تحميل المقطع من الرابط، فتُحقّق من النص المكتوب"
 
     # ---------- الصوت والفيديو ----------
     else:
@@ -107,7 +161,14 @@ async def analyze(
                 return error(422, e.code, e.message)
 
     # ---------- التحقق من المضمون ----------
-    claims = engine.find_claims(transcript)
+    kind = kind if kind in ("auto", "hadith", "quran") else "auto"
+    claims = engine.find_claims(transcript, kind=kind)
+    # إذا ما تعرّف النظام على شي من التفريغ، وكتب المستخدم وش انقال في المقطع، نتحقق من كلامه
+    if input_type in ("audio", "video", "url") and context and len(context.strip()) >= 8 \
+            and not any(c["matched"] for c in claims) and context.strip() != transcript:
+        ctx_claims = engine.find_claims(context.strip(), kind=kind)
+        if any(c["matched"] for c in ctx_claims):
+            claims = ctx_claims
     evidence["content"] = content_block(claims)
     verdict, summary, abstain, disclaimer = decide(evidence["content"], evidence["authenticity"], duration)
 

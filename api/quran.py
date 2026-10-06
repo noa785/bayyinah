@@ -80,6 +80,12 @@ class QuranIndex:
         if len(vw) < 3 or _is_opener(self.norm[idx]):
             return 0.0, False
         score, full = sim, False
+        # نفس بوابة الكلمات: التشابه في الحروف وحده ما يكفي
+        vc = [w for w in vw if w not in STOP]
+        qs = sum(1 for w in content if any(_close(w, x) for x in vc)) / max(len(content), 1)
+        vs = sum(1 for w in vc if any(_close(w, x) for x in content)) / max(len(vc), 1)
+        if max(qs, vs) < 0.75:
+            score = 0.0
         # الآية كاملة داخل الكلام
         vcont = [w for w in vw if w not in STOP]
         if len(vcont) >= 3 and _ordered_hits(vcont, words) / len(vcont) >= 0.9:
