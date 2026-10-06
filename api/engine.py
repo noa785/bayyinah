@@ -12,6 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from arabic import candidate_segments, normalize
+from quran import QuranIndex, _close
 
 # حدود المطابقة. اللي تحت MIN_SCORE يعتبر غير موجود في القاعدة.
 EXACT_SCORE = 0.85
@@ -40,6 +41,9 @@ class HadithEngine:
         # مقارنة على مستوى الحروف عشان تتحمل اختلاف الإملاء والتشكيل
         self.vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True)
         self.matrix = self.vec.fit_transform(self.norm)
+        # آيات القرآن الكريم، عشان إذا ورد في المقطع آية نعرّفها ولا نقول غير محسوم
+        qpath = Path(path).with_name("quran.json")
+        self.quran = QuranIndex(qpath) if qpath.exists() else None
 
     def _containment(self, seg_words, idx):
         """نسبة كلمات الحديث الموجودة في المقطع وبنفس الترتيب، مفيدة لما الحديث قصير والكلام طويل."""
@@ -89,9 +93,17 @@ class HadithEngine:
             if hid not in best or score > best[hid][0]:
                 best[hid] = (score, seg)
 
+        if self.quran:
+            for seg in candidate_segments(text):
+                hit = self.quran.search(seg)
+                if hit:
+                    key = "Q#" + ",".join(map(str, hit[1]))
+                    if key not in best or hit[0] > best[key][0]:
+                        best[key] = (hit[0], seg)
+
         # إذا الحديث وبديله الصحيح طلعوا مع بعض، ناخذ الأقوى بس من كل زوج
-        chosen = sorted(best.items(), key=lambda kv: -kv[1][0])
-        claims, used_roots, used_segs = [], set(), []
+        chosen = sorted(best.items(), key=lambda kv: (-kv[1][0], -kv[0].count(",")))
+        claims, used_roots, used_segs, used_verses = [], set(), [], set()
         for hid, (score, seg) in chosen:
             root = hid.replace("-ALT", "")
             if root in used_roots:
@@ -102,12 +114,28 @@ class HadithEngine:
                 continue
             used_roots.add(root)
             used_segs.append(words)
-            claims.append(self._claim(hid, score, seg))
+            if hid.startswith("Q#"):
+                run = [int(i) for i in hid[2:].split(",")]
+                if set(run) <= used_verses:
+                    continue
+                used_verses |= set(run)
+                claims.append(self.quran.claim(run, score, seg))
+            else:
+                claims.append(self._claim(hid, score, seg))
             if len(claims) >= max_claims:
                 break
 
         if not claims:
             claims.append({"quoted_text": text.strip()[:300], "matched": False, "match_type": None, "hadith": None})
+        elif all(c.get("kind") == "quran" for c in claims):
+            # الآية ثابتة، بس لو معها كلام كثير ما لقيناه ما نقول إن المقطع كله مؤيد
+            covered = set()
+            for hid, _ in chosen:
+                if hid.startswith("Q#"):
+                    covered |= self.quran.words_of([int(i) for i in hid[2:].split(",")])
+            rest = [w for w in normalize(text).split() if w not in STOP and not any(_close(w, c) for c in covered)]
+            if len(rest) >= 6:
+                claims.append({"quoted_text": " ".join(rest)[:300], "matched": False, "match_type": None, "hadith": None})
         return claims
 
     def _claim(self, hid, score, seg):

@@ -8,11 +8,14 @@
 1. كل حديث في القاعدة بنصه، هل يرجع حكمه الصحيح
 2. نفس الحديث مكتوب بدون تشكيل ومع كلام قبله وبعده، مثل ما ينقال في مقطع
 3. نصوص مو موجودة في القاعدة، هل النظام يمتنع بدل ما يحكم غلط
+4. أخطاء تفريغ مصطنعة: نغير حرف في كلمة من كل خمس كلمات تقريباً، مثل ما يغلط Whisper
+5. جزء من الحديث: أول ستين بالمية من كلماته بس، مثل ما ينقله الناس مختصر
 
 ويطلع الأرقام اللي نحطها في العرض التقديمي.
 """
 
 import json
+import random
 import time
 
 from arabic import DIACRITICS
@@ -38,6 +41,29 @@ EXPECTED = {"authentic": "supported", "weak": "contradicted", "not_authentic": "
 
 NO_AUDIO = {"signal": None}
 
+# حروف يخلط بينها التفريغ الصوتي عادة
+CONFUSE = {"ح": "ه", "ه": "ح", "ع": "ا", "ا": "ع", "ص": "س", "س": "ص", "ض": "د", "د": "ض",
+           "ط": "ت", "ت": "ط", "ظ": "ز", "ز": "ظ", "ذ": "ز", "ق": "ك", "ك": "ق", "ث": "س"}
+
+
+def noisy(text, rnd, rate=0.2):
+    """يغير حرف واحد في نسبة من الكلمات، أو يحذف حرف."""
+    words = DIACRITICS.sub("", text).split()
+    out = []
+    for w in words:
+        if len(w) > 2 and rnd.random() < rate:
+            i = rnd.randrange(len(w))
+            c = w[i]
+            w = w[:i] + CONFUSE.get(c, "") + w[i + 1:]
+        out.append(w)
+    return " ".join(out)
+
+
+def partial(text, ratio=0.6):
+    words = DIACRITICS.sub("", text).split()
+    n = max(4, round(len(words) * ratio))
+    return " ".join(words[:n])
+
 
 def verdict_for(engine, text):
     claims = engine.find_claims(text)
@@ -47,7 +73,8 @@ def verdict_for(engine, text):
 
 def run():
     e = HadithEngine()
-    rows = {"exact": [0, 0], "spoken": [0, 0], "attribution": [0, 0]}
+    rows = {"exact": [0, 0], "spoken": [0, 0], "noisy": [0, 0], "partial": [0, 0], "attribution": [0, 0]}
+    rnd = random.Random(7)
     wrong = []
     t0 = time.time()
 
@@ -56,6 +83,8 @@ def run():
         for mode, text in (
             ("exact", h["text"]),
             ("spoken", "يقول النبي صلى الله عليه وسلم " + DIACRITICS.sub("", h["text"]) + " فانتبهوا لهذا"),
+            ("noisy", noisy(h["text"], rnd)),
+            ("partial", partial(h["text"])),
         ):
             v, claims = verdict_for(e, text)
             ok = v == want
@@ -77,14 +106,40 @@ def run():
         if v != "undetermined":
             wrong.append(f"[negative] توقعنا امتناع وطلع {v}: {t}")
 
-    ms = (time.time() - t0) * 1000 / (len(e.db) * 2 + len(NEGATIVES))
+    # آيات القرآن: عينة ثابتة من ٢٠٠ آية فيها خمس كلمات أو أكثر، بالكتابة المعتادة ومع أخطاء تفريغ
+    from quran import uthmani_to_plain
+    q_ok, q_noisy_ok, q_n = 0, 0, 0
+    if e.quran:
+        pool = [i for i, v in enumerate(e.quran.verses) if len(e.quran.norm[i].split()) >= 5]
+        for i in random.Random(11).sample(pool, 200):
+            v = e.quran.verses[i]
+            plain = uthmani_to_plain(v["text"])
+            for mode, text in (("plain", plain), ("noisy", noisy(plain, rnd))):
+                claims = e.find_claims(text)
+                # الآيات المتكررة بنفس اللفظ في أكثر من سورة تُحسب صحيحة إذا رجع أي موضع منها
+                hit = any(c["matched"] and c.get("kind") == "quran"
+                          and e.quran.norm[i] in {e.quran.norm[k] for k in e.quran.run_of(c["hadith"]["id"])}
+                          for c in claims)
+                if mode == "plain":
+                    q_ok += hit
+                else:
+                    q_noisy_ok += hit
+                if not hit and mode == "plain":
+                    wrong.append(f"[quran] {v['s']}:{v['a']} ما انعرفت: {plain[:40]}")
+            q_n += 1
+
+    ms = (time.time() - t0) * 1000 / (len(e.db) * 4 + len(NEGATIVES) + 2 * q_n)
     pct = lambda a: f"{100 * a[0] / max(a[1], 1):.1f}% ({a[0]}/{a[1]})"
     report = {
         "عدد الأحاديث في القاعدة": len(e.db),
         "دقة الحكم بالنص المطابق": pct(rows["exact"]),
         "دقة الحكم بالنص المنطوق مع كلام قبله وبعده": pct(rows["spoken"]),
+        "دقة الحكم مع أخطاء تفريغ مصطنعة": pct(rows["noisy"]),
+        "دقة الحكم على جزء من الحديث": pct(rows["partial"]),
         "دقة الإسناد (رجع نفس الحديث)": pct(rows["attribution"]),
         "الامتناع الصحيح عند غياب النص": pct([abstain_ok, len(NEGATIVES)]),
+        "التعرف على الآية وموضعها (عينة 200 آية)": pct([q_ok, q_n]),
+        "التعرف على الآية مع أخطاء تفريغ مصطنعة": pct([q_noisy_ok, q_n]),
         "متوسط زمن التحقق للنص": f"{ms:.0f} ملي ثانية",
     }
     for k, v in report.items():

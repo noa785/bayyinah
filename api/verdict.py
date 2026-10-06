@@ -48,7 +48,17 @@ def decide(content, auth, duration):
         return ("undetermined", "لا تكفي القرائن للحكم، ويُحال المقطع إلى المختص", reason,
                 NOT_FOUND_NOTE + DISCLAIMER)
 
-    # 5. كل الأحاديث صحيحة، والصوت ما فيه قرينة توليد
+    # 5. فيه نص ثابت ومعه كلام ما لقيناه في القاعدة: نمتنع عن الحكم على المقطع كله
+    if any(not c["matched"] for c in claims):
+        return ("undetermined", "في المقطع ما ثبت في المصادر، ومعه كلام لم يُعثر عليه، فيُحال إلى المختص",
+                "partial_match", NOT_FOUND_NOTE + DISCLAIMER)
+
+    # 6. كل ما ورد آيات من القرآن الكريم
+    if classes and all(c == "quran" for c in classes):
+        what = "النص الوارد آية من القرآن الكريم، مطابق لنص المصحف" if len(classes) == 1 else "النصوص الواردة آيات من القرآن الكريم، مطابقة لنص المصحف"
+        return ("supported", what, None, DISCLAIMER)
+
+    # 7. كل الأحاديث صحيحة، والصوت ما فيه قرينة توليد
     if auth.get("signal") == "inconclusive":
         return ("supported", "المضمون ثابت في المصادر المعتمدة، وفحص أصالة الصوت غير حاسم", None, DISCLAIMER)
     return ("supported", "المضمون ثابت في المصادر المعتمدة", None, DISCLAIMER)
@@ -60,6 +70,8 @@ def content_block(claims):
         return {"status": "not_found", "label": "لم يُعثر على هذا النص في المصادر المتاحة", "claims": claims}
     bad = [c for c in matched if c["hadith"]["grade_class"] in BAD]
     label = "الحديث الوارد لا يثبت" if bad else "الحديث ثابت"
+    if all(c["hadith"]["grade_class"] == "quran" for c in matched):
+        label = "آية من القرآن الكريم"
     if len(matched) > 1:
         label = f"وُجد {len(matched)} أحاديث في المصادر"
     return {"status": "verified", "label": label, "claims": claims}

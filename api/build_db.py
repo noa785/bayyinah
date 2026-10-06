@@ -151,6 +151,29 @@ def read_docx(path: Path, review: list):
     return rows
 
 
+def tidy_name(s):
+    """يصلح أخطاء الكتابة في أسماء الكتب والعلماء الجاية من ملفات الوورد."""
+    if not s:
+        return s
+    s = re.sub(r"\s+", " ", s).strip(" []،,")
+    s = re.sub(r"^اال", "ال", s)
+    s = re.sub(r"\s+(ال|ا)$", "", s)
+    words = s.split()
+    half = len(words) // 2
+    if len(words) % 2 == 0 and half and words[:half] == words[half:]:
+        s = " ".join(words[:half])
+    return {"الالباني": "الألباني"}.get(s, s)
+
+
+def tidy(rec):
+    if not rec:
+        return
+    for k in ("graded_by", "narrator"):
+        rec[k] = tidy_name(rec.get(k))
+    if rec.get("source") and rec["source"].get("book"):
+        rec["source"]["book"] = tidy_name(rec["source"]["book"])
+
+
 def apply_corrections(rows, review, path="data/corrections.json"):
     """يطبق مراجعات المتخصصة الشرعية على البيانات، والملفات الأصلية تبقى كما هي."""
     f = Path(path)
@@ -181,6 +204,9 @@ def main(paths):
     for p in paths:
         all_rows.extend(read_docx(Path(p), review))
     all_rows = apply_corrections(all_rows, review)
+    for rec in all_rows:
+        tidy(rec)
+        tidy(rec.get("alternative"))
 
     db, seen = [], set()
     for rec in all_rows:

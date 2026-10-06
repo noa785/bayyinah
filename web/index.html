@@ -211,6 +211,7 @@ textarea:focus,input:focus{outline:0;border-color:rgba(64,192,240,.7);box-shadow
 .grade.weak,.grade.not_authentic{background:var(--bad-bg);color:var(--bad)}
 .grade.detailed{background:var(--mid-bg);color:var(--mid)}
 .grade.unknown{background:var(--na-bg);color:var(--na)}
+.grade.quran{background:#ECEFFF;color:#3A3FB8}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px}
 .kv dt{color:var(--ink-3);white-space:nowrap}
 .kv dd{color:var(--ink);font-weight:500}
@@ -412,6 +413,7 @@ footer b{color:var(--on-dark-2);font-weight:500}
             <button class="chip" data-sample="قال رسول الله صلى الله عليه وسلم: الجنة تحت أقدام الأمهات">الجنة تحت أقدام الأمهات</button>
             <button class="chip" data-sample="قال النبي صلى الله عليه وسلم: من لا يرحم لا يرحم">من لا يرحم لا يرحم</button>
             <button class="chip" data-sample="إن أبغض الحلال إلى الله عز وجل الطلاق">أبغض الحلال إلى الله الطلاق</button>
+            <button class="chip" data-sample="قال الله تعالى: الله لا إله إلا هو الحي القيوم لا تأخذه سنة ولا نوم">آية الكرسي</button>
             <button class="chip" data-sample="من صام يوم كذا كتب الله له أجر ألف شهيد">من صام يوم كذا<em>ليس في القاعدة</em></button>
           </div>
         </div>
@@ -442,7 +444,7 @@ footer b{color:var(--on-dark-2);font-weight:500}
       <div class="card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 5v16M9 8h6M9 12h4"/></svg></div>
         <h3>التحقق من المضمون</h3>
-        <p>تفريغ الكلام ومقابلة الأحاديث الواردة فيه بقاعدة مغلقة راجعتها متخصصة شرعية.</p>
+        <p>تفريغ الكلام ومقابلة الأحاديث الواردة فيه بقاعدة مغلقة راجعتها متخصصة شرعية، والتعرف على آيات القرآن الكريم وموضعها.</p>
         <span class="state live">مفعّل الآن</span>
       </div>
     </div>
@@ -675,7 +677,7 @@ function claimHTML(c) {
   return `
     <article class="takhrij">
       <div class="matn">
-        <div class="q">ورد في المقطع: <q>${esc(c.quoted_text)}</q>${c.match_type === "partial" ? "، ويطابق جزءاً من الحديث" : ""}</div>
+        <div class="q">ورد في المقطع: <q>${esc(c.quoted_text)}</q>${c.match_type === "partial" ? (c.kind === "quran" ? "، ويطابق جزءاً من الآية" : "، ويطابق جزءاً من الحديث") : ""}</div>
         <div class="text">${esc(h.text)}</div>
         ${h.note ? `<div class="note">${esc(h.note)}</div>` : ""}
       </div>
@@ -745,7 +747,7 @@ function renderReport(d) {
       ${isMedia ? `<div class="sec"><h3>ما قيل في المقطع</h3><div class="heard">${esc(d.transcript?.text)}<small>تفريغ آلي للكلام</small></div></div>` : ""}
 
       <div class="sec">
-        <h3>${claims.length > 1 ? `الأحاديث الواردة (${toAr(claims.length)})` : "الحديث الوارد"}</h3>
+        <h3>${claims.some(c => c.kind === "quran") ? (claims.length > 1 ? `النصوص الواردة (${toAr(claims.length)})` : "الآية الواردة") : (claims.length > 1 ? `الأحاديث الواردة (${toAr(claims.length)})` : "الحديث الوارد")}</h3>
         ${claims.map(claimHTML).join("")}
       </div>
 
@@ -795,6 +797,7 @@ function replyText(d) {
   for (const c of d.evidence?.content?.claims || []) {
     if (!c.matched) { lines.push(`النص: ${c.quoted_text}`, "لم يُعثر عليه في المصادر المتاحة، ويُحال إلى المختص.", ""); continue; }
     const h = c.hadith;
+    if (c.kind === "quran") { lines.push(`الآية: ${h.text}`, `الموضع: ${h.source?.book || ""}، ${h.source?.ref || ""}`, ""); continue; }
     lines.push(`الحديث: ${h.text}`, `الحكم: ${h.grade_raw}${h.graded_by ? "، " + h.graded_by : ""}`, `المصدر: ${h.source?.book || ""}${h.source?.ref ? " (" + h.source.ref + ")" : ""}`);
     if (h.alternative) lines.push(`البديل الصحيح: ${h.alternative.text}`, `حكمه: ${h.alternative.grade_raw || ""}${h.alternative.graded_by ? "، " + h.alternative.graded_by : ""}`);
     lines.push("");
