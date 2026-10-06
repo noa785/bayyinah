@@ -120,8 +120,11 @@ async def analyze(
         if not transcript:
             transcript = (context or "").strip()
             if len(transcript) < 8:
+                if "youtube.com" in link or "youtu.be" in link:
+                    return error(422, "download_failed",
+                                 "يوتيوب يمنع تحميل المقاطع من الخوادم. نزّل المقطع وارفعه من تبويب «فيديو» أو «صوت»، أو اكتب ما قيل فيه في الخانة.")
                 return error(422, "download_failed",
-                             "تعذّر تحميل المقطع من هذا الرابط، فبعض المنصات تمنع التحميل. اكتب ما قيل في المقطع في الخانة وأعد المحاولة.")
+                             "تعذّر تحميل المقطع من هذا الرابط، فبعض المنصات تمنع التحميل. ارفع المقطع من تبويب «فيديو» أو «صوت»، أو اكتب ما قيل فيه في الخانة.")
             if wav is None:
                 evidence["authenticity"]["label"] = "تعذّر تحميل المقطع من الرابط، فتُحقّق من النص المكتوب"
 
