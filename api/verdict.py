@@ -59,6 +59,8 @@ def decide(content, auth, duration, prov=None, original=None):
 
     # 2ج. الكلام موجود في الأصل، وفيه قبله أو بعده شرط أو استثناء لم يرد في المقطع
     if original.get("status") == "context_omitted":
+        if "ينقله الشيخ عن غيره" in (original.get("label") or ""):
+            return ("undetermined", "الكلام موجود في الأصل، لكنه قولٌ ينقله الشيخ عن غيره وليس رأيه، ويُحال إلى المختص", "reported_view", DISCLAIMER)
         return ("undetermined", "الكلام موجود في الأصل، لكن حُذف منه شرط أو استثناء قد يغيّر المعنى، ويُحال إلى المختص", "context_omitted", DISCLAIMER)
 
     # 2د. الكلام موجود بلفظه في الموقع الرسمي للعالم، وما فيه حديث لا يثبت

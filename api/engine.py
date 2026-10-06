@@ -11,7 +11,7 @@ from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from arabic import candidate_segments, normalize
+from arabic import QUOTE_MARKERS, candidate_segments, normalize
 from quran import QuranIndex, _close
 
 # حدود المطابقة. اللي تحت MIN_SCORE يعتبر غير موجود في القاعدة.
@@ -158,6 +158,13 @@ class HadithEngine:
             if len(claims) >= max_claims:
                 break
 
+        # جزء قصير من أول حديث طويل، مثل «إنما الأعمال بالنيات»: تشابه الحروف يضعف مع طول الحديث،
+        # فنقبله إذا وردت كلماته كلها متتالية في الحديث وبنفس الترتيب
+        if not claims and kind != "quran":
+            hit = self._short_part(text)
+            if hit is not None:
+                claims.append(self._claim(self.db[hit]["id"], EXACT_SCORE, text))
+
         if not claims:
             claims.append({"quoted_text": text.strip()[:300], "matched": False, "match_type": None, "hadith": None})
         elif all(c.get("kind") == "quran" for c in claims):
@@ -170,6 +177,20 @@ class HadithEngine:
             if len(rest) >= 6:
                 claims.append({"quoted_text": " ".join(rest)[:300], "matched": False, "match_type": None, "hadith": None})
         return claims
+
+    def _short_part(self, text):
+        q = [w for w in normalize(QUOTE_MARKERS.sub(" ", text)).split() if w not in STOP]
+        if not (2 <= len(q) <= 8) or len("".join(q)) < 9:
+            return None
+        found = []
+        for idx, h in enumerate(self.norm):
+            hw = [w for w in h.split() if w not in STOP]
+            for i in range(len(hw) - len(q) + 1):
+                if all(_eq(a, b) for a, b in zip(q, hw[i:i + len(q)])):
+                    found.append(idx)
+                    break
+        roots = {self.db[i]["id"].replace("-ALT", "") for i in found}
+        return found[0] if len(roots) == 1 else None
 
     def _claim(self, hid, score, seg):
         h = self.by_id[hid]

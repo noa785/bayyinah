@@ -24,8 +24,13 @@ MIN_WORDS = 8         # أقل عدد كلمات متطابقة نقبل به
 MIN_COVERAGE = 0.6    # نسبة كلمات المقطع اللي لازم نلقاها في الأصل بالترتيب
 
 # كلمات تبدأ شرطاً أو استثناءً قد يتغير المعنى بحذفه (بعد التطبيع)
-AFTER_MARKERS = {"لكن", "ولكن", "لكنه", "ولكنه", "الا", "بشرط", "بشرطه", "مالم", "اما", "واما", "غير", "الااذا", "بخلاف", "سوي", "عدا"}
-BEFORE_MARKERS = {"اذا", "ان", "لو", "متي", "اذاكان", "انكان", "عند", "بشرط"}
+# ننظر فقط في الكلمات القليلة التي تلي الكلام مباشرة، لأن الاستدراك المحذوف يأتي عادة بعده فوراً
+AFTER_WINDOW, BEFORE_WINDOW = 12, 4
+AFTER_MARKERS = {"اذا", "لكن", "ولكن", "لكنه", "ولكنه", "لكنها", "ولكنها", "الا", "بشرط", "بشرطه", "مالم", "الااذا", "بخلاف", "سوي", "عدا", "يستثني", "ويستثني"}
+BEFORE_MARKERS = {"اذا", "لو", "اذاكان", "انكان", "بشرط"}
+# عبارات تدل على أن الكلام قولٌ ينقله العالم عن غيره، لا رأيه هو
+REPORTED = (("بعض", "اهل", "العلم"), ("قال", "بعضهم"), ("وقال", "بعضهم"), ("ذهب", "بعض"), ("وذهب", "بعض"),
+            ("قال", "اخرون"), ("وقال", "اخرون"), ("قال", "قوم"), ("وقالوا",), ("قالوا",), ("يري", "بعض"), ("زعم",), ("وزعم",))
 PHRASES_AFTER = (("ما", "لم"), ("الا", "اذا"), ("الا", "ان"), ("غير", "ان"), ("بشرط", "ان"))
 
 
@@ -90,10 +95,16 @@ class OriginalsArchive:
         doc, (s, e) = self.docs[best[0]], best[2]
         before_n, after_n = doc["norm"][max(0, s - 12):s], doc["norm"][e:e + 25]
         omitted = None
-        if any(w in AFTER_MARKERS for w in after_n[:25]) or any(
-                after_n[k:k + 2] == list(p) for p in PHRASES_AFTER for k in range(len(after_n) - 1)):
+        near = after_n[:AFTER_WINDOW]
+        lead = doc["norm"][max(0, s - 12):s] + doc["norm"][s:min(e, s + 6)]
+        reported = any(lead[k:k + len(p)] == list(p) for p in REPORTED for k in range(len(lead) - len(p) + 1))
+        # الاستدراك المحذوف بعد الكلام أوضح دليل على الاقتطاع، فيُقدَّم، ثم نقل الشيخ عن غيره
+        if any(w in AFTER_MARKERS for w in near) or any(
+                near[k:k + 2] == list(p) for p in PHRASES_AFTER for k in range(len(near) - 1)):
             omitted = "after"
-        elif any(w in BEFORE_MARKERS for w in before_n[-12:]) and s > 0:
+        elif reported:
+            omitted = "reported"
+        elif any(w in BEFORE_MARKERS for w in before_n[-BEFORE_WINDOW:]) and s > 0:
             omitted = "before"
         return {
             "doc": doc, "start": s, "end": e, "coverage": best[1], "omitted": omitted,
@@ -115,6 +126,10 @@ class OriginalsArchive:
         d = m["doc"]
         source = {"scholar": d.get("scholar"), "title": d.get("title"), "url": d.get("url"), "audio": d.get("audio")}
         whole = m["start"] == 0 and m["end"] >= len(d["norm"]) - 2
+        if m["omitted"] == "reported":
+            return {"status": "context_omitted", "source": source,
+                    "before": m["before"], "quoted": m["quoted"], "after": m["after"],
+                    "label": f"الكلام موجود في {d.get('title') or 'الأصل'} على الموقع الرسمي، لكنه قولٌ ينقله الشيخ عن غيره وليس رأيه، فقد يكون مقتطعاً على نحو يغيّر نسبته"}
         if m["omitted"]:
             where = "بعده" if m["omitted"] == "after" else "قبله"
             return {"status": "context_omitted", "source": source,
