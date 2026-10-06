@@ -6,6 +6,7 @@ scikit-learn
 python-docx
 faster-whisper
 yt-dlp
+c2pa-python==0.38.0
 # كشف التزييف (نفعلها بعد ما نختار النموذج):
 # transformers
 # torch

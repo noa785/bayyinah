@@ -83,7 +83,7 @@ def authenticity(wav, duration):
 
     if not DEEPFAKE_MODEL:
         return {**base, "status": "not_applicable", "signal": None,
-                "label": "فحص التزييف قيد التفعيل في هذه النسخة"}
+                "label": "كشف الصوت المولَّد بنموذج مدرَّب في المرحلة القادمة، بعد بناء بيانات عربية واختباره عليها"}
 
     if duration < SHORT_SECONDS:
         return {**base, "signal": "inconclusive", "label": "القرائن غير كافية لأن المقطع قصير جداً"}

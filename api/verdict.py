@@ -16,12 +16,19 @@ NOT_FOUND_NOTE = "عدم العثور على النص في قاعدتنا لا �
 BAD = {"not_authentic", "weak", "detailed"}
 
 
-def decide(content, auth, duration):
+def decide(content, auth, duration, prov=None, original=None):
     """يرجع (verdict, summary, abstain_reason, disclaimer)."""
+    prov = prov or {}
+    original = original or {}
     claims = content["claims"]
     matched = [c for c in claims if c["matched"]]
     classes = [c["hadith"]["grade_class"] for c in matched]
     synthetic = auth.get("signal") == "likely_synthetic"
+
+    # 0. توقيع اعتماد المحتوى (C2PA) السليم يصرّح بأن المقطع مولَّد: تصريح من أداة التوليد نفسها
+    if prov.get("status") == "ai_declared" and prov.get("source") == "c2pa":
+        extra = "، والحديث الوارد لا يثبت" if any(c in BAD for c in classes) else ""
+        return ("contradicted", f"توقيع اعتماد المحتوى في الملف يصرّح بأن المقطع مولَّد بالذكاء الاصطناعي{extra}", None, DISCLAIMER)
 
     # 1. صوت مولَّد بقرينة قوية: مخالف مهما كان المضمون
     if synthetic:
@@ -35,6 +42,30 @@ def decide(content, auth, duration):
         if "detailed" in classes and n == 1:
             what = "الحديث الوارد في المقطع لا يثبت بهذا اللفظ أو النسبة، وفي الحكم تفصيل"
         return ("contradicted", what, None, DISCLAIMER)
+
+    # 2أ. بيانات الملف تذكر أداة توليد معروفة: تنبيه قابل للتعديل، فنمتنع ونحيل للمختص
+    if prov.get("status") == "ai_declared":
+        tool = f" ({prov['tool']})" if prov.get("tool") else ""
+        return ("undetermined", f"بيانات الملف تذكر أداة توليد معروفة{tool}، فيُحال المقطع إلى المختص", "generator_metadata", DISCLAIMER)
+
+    # 2ب. في الملف توقيع لا يطابق محتواه: قد يكون عُدّل أو اقتُطع بعد توقيعه
+    if prov.get("status") == "signed_invalid":
+        return ("undetermined", "في الملف توقيع اعتماد لا يطابق محتواه، فقد يكون عُدّل بعد توقيعه، ويُحال إلى المختص", "signature_mismatch", DISCLAIMER)
+
+    # إذا كان كل ما في المقطع حديثاً أو آية تعرّفنا عليها، فالحكم لها، والأصل يُعرض للسياق فقط
+    whole_text_known = bool(claims) and all(c["matched"] for c in claims)
+    if whole_text_known:
+        original = {}
+
+    # 2ج. الكلام موجود في الأصل، وفيه قبله أو بعده شرط أو استثناء لم يرد في المقطع
+    if original.get("status") == "context_omitted":
+        return ("undetermined", "الكلام موجود في الأصل، لكن حُذف منه شرط أو استثناء قد يغيّر المعنى، ويُحال إلى المختص", "context_omitted", DISCLAIMER)
+
+    # 2د. الكلام موجود بلفظه في الموقع الرسمي للعالم، وما فيه حديث لا يثبت
+    if original.get("status") == "found" and not any(c in ("mixed", "unknown") for c in classes):
+        who = (original.get("source") or {}).get("scholar")
+        where = f"موقع {who} الرسمي" if who else "الموقع الرسمي للعالم"
+        return ("supported", f"الكلام المنسوب موجود بلفظه في {where}، ويُعرض ما قبله وما بعده", None, DISCLAIMER)
 
     # 3أ. اختلف المحدثون في الحكم على الحديث: نعرض أقوالهم ونحيل للمختص
     if any(c == "mixed" for c in classes):

@@ -237,6 +237,15 @@ textarea:focus,input:focus{outline:0;border-color:rgba(64,192,240,.7);box-shadow
 .evid .d{color:var(--ink-2);font-size:14px}
 .tag{font-size:12.5px;font-weight:600;border-radius:999px;padding:4px 12px;white-space:nowrap}
 .tag.ok{background:var(--ok-bg);color:var(--ok)} .tag.bad{background:var(--bad-bg);color:var(--bad)}
+.orig{border:1px solid var(--rule);border-radius:14px;padding:16px 18px;background:var(--tint)}
+.orig.warn{border-color:var(--mid-ring);background:var(--mid-bg)}
+.orig .who{font-size:14px;color:var(--ink-2);margin-bottom:8px}.orig .who b{color:var(--ink)}
+.orig .ctx{font-family:var(--naskh);font-size:20px;line-height:2;color:var(--ink)}
+.orig .ctx .dim{color:var(--ink-3)}
+.orig .ex{color:var(--bad);background:var(--bad-bg);padding:0 4px;border-radius:4px;font-weight:700}
+.orig mark{background:#FFF1B8;color:var(--ink);padding:1px 3px;border-radius:4px}
+.orig .note{font-size:14px;color:var(--ink-2);margin:10px 0 6px}
+.orig a{font-size:14px;color:var(--blue);margin-inline-end:14px}
 .tag.mid{background:var(--mid-bg);color:var(--mid)} .tag.na{background:var(--na-bg);color:var(--na)}
 .wave{display:flex;align-items:center;gap:2px;height:30px;direction:ltr;margin-top:6px}
 .wave i{display:block;width:4px;border-radius:2px;background:linear-gradient(180deg,var(--cyan),var(--indigo))}
@@ -449,14 +458,14 @@ footer b{color:var(--on-dark-2);font-weight:500}
       <div class="card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 7v10M21 12h0"/></svg></div>
         <h3>أصالة الصوت</h3>
-        <p>هل الصوت بشري أم مولَّد، وهل يطابق صوت المتحدث المنسوب إليه.</p>
-        <span class="state next">المرحلة القادمة</span>
+        <p>فحص بيانات الملف وتوقيع اعتماد المحتوى (C2PA) مفعّل الآن، ويليه كشف الصوت المولَّد ومطابقة صوت المتحدث المنسوب إليه.</p>
+        <span class="state live">مفعّل جزئياً</span>
       </div>
       <div class="card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="11" height="14" rx="2"/><path d="M10 8h9a2 2 0 012 2v8a2 2 0 01-2 2h-7"/></svg></div>
         <h3>المطابقة مع الأصل</h3>
-        <p>البحث عن الدرس الأصلي لكشف الاقتطاع، وعرض ما قبل المقطع وما بعده.</p>
-        <span class="state next">الأرشيف قيد البناء</span>
+        <p>تحديد موضع الكلام في نص الفتوى الأصلي على الموقع الرسمي للعالم، وعرض ما قبله وما بعده، والتنبيه إذا حُذف منه شرط أو استثناء.</p>
+        <span class="state live">مفعّلة بأرشيف تجريبي</span>
       </div>
       <div class="card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 5v16M9 8h6M9 12h4"/></svg></div>
@@ -474,6 +483,8 @@ footer b{color:var(--on-dark-2);font-weight:500}
         <li>إذا لم يُعثر على النص في القاعدة ولا في الموسوعة الحديثية، لأن غيابه لا يعني أنه موضوع.</li>
         <li>إذا اختلفت أحكام المحدثين في الحديث، فتعرضها وتحيل إلى المختص.</li>
         <li>إذا كان المقطع قصيراً أو رديئاً لا تكفي قرائنه.</li>
+        <li>إذا حُذف من الكلام شرط أو استثناء موجود في الأصل.</li>
+        <li>إذا ذكرت بيانات الملف أداة توليد، أو لم يطابق توقيعه محتواه.</li>
         <li>إذا احتاج الحكم إلى تفصيل يرجع فيه إلى المختص.</li>
       </ul>
     </div>
@@ -726,12 +737,32 @@ function evidRow(name, ev) {
     cls = sig === "likely_human" ? "ok" : sig === "likely_synthetic" ? "bad" : "mid";
     tag = sig === "likely_human" ? "بشري على الأرجح" : sig === "likely_synthetic" ? "مولَّد على الأرجح" : "غير حاسم";
   } else if (name === "auth" && s === "not_applicable") { cls = "na"; tag = "المرحلة القادمة"; }
+  else if (name === "prov" && s === "ai_declared") { cls = "bad"; tag = ev.source === "c2pa" ? "يصرّح بالتوليد" : "أداة توليد"; }
+  else if (name === "prov" && s === "signed") { cls = "ok"; tag = "موقّع"; }
+  else if (name === "prov" && s === "signed_invalid") { cls = "mid"; tag = "توقيع لا يطابق"; }
+  else if (name === "prov" && s === "none") { cls = "na"; tag = "بلا توقيع"; }
+  else if (name === "om" && s === "context_omitted") { cls = "mid"; tag = "حُذف شرط أو استثناء"; }
   else if (s === "matched" || s === "found") { cls = "ok"; tag = "مطابق"; }
   else if (s === "not_matched") { cls = "bad"; tag = "غير مطابق"; }
   else if (s === "not_found") { cls = "mid"; tag = "لم يُعثر عليه"; }
   else if (s === "no_reference") { cls = "na"; tag = "لا توجد عينة"; }
   else if (s === "failed") { cls = "mid"; tag = "تعذّر الفحص"; }
   return { cls, tag };
+}
+
+function originalHTML(o) {
+  if (!o || (o.status !== "found" && o.status !== "context_omitted")) return "";
+  const src = o.source || {};
+  const warn = o.status === "context_omitted";
+  return `<div class="sec">
+    <h3>الأصل في الموقع الرسمي</h3>
+    <div class="orig ${warn ? "warn" : ""}">
+      <p class="who"><b>${esc(src.scholar || "")}</b>${src.title ? "، " + esc(src.title) : ""}</p>
+      <p class="ctx">${o.before ? `<span class="dim">…${esc(o.before)} </span>` : ""}<mark>${esc(o.quoted || "")}</mark>${o.after ? `<span class="dim"> ${warn ? esc(o.after).replace(/(^|\s)(ولكن|لكنها|لكنه|لكن|إلا|بشرط|ما لم|غير أن|أما)(?=[\s،,:]|$)/, '$1<b class="ex">$2</b>') : esc(o.after)}…</span>` : ""}</p>
+      <p class="note">${esc(o.label)}</p>
+      ${src.url ? `<a href="${esc(src.url)}" target="_blank" rel="noopener">افتح الأصل في الموقع الرسمي</a>` : ""}${src.audio ? ` <a href="${esc(src.audio)}" target="_blank" rel="noopener">استمع للأصل</a>` : ""}
+    </div>
+  </div>`;
 }
 
 function renderReport(d) {
@@ -741,7 +772,7 @@ function renderReport(d) {
   const dur = d.transcript?.duration_sec;
   const secs = (d.processing_ms / 1000).toFixed(1);
   const isMedia = d.input_type === "audio" || d.input_type === "video" || (d.input_type === "url" && !!d.transcript?.duration_sec);
-  const a = evidRow("auth", E.authenticity), sp = evidRow("sp", E.speaker_match), om = evidRow("om", E.original_match);
+  const pv = evidRow("prov", E.provenance), a = evidRow("auth", E.authenticity), sp = evidRow("sp", E.speaker_match), om = evidRow("om", E.original_match);
   const wave = E.authenticity?.waveform;
   const now = new Date();
   const date = new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-arab", { day: "numeric", month: "long", year: "numeric" }).format(now);
@@ -769,15 +800,18 @@ function renderReport(d) {
         </div>
         <button class="linkbtn" id="fixOpen">أخطأ التفريغ؟ صحّحه وأعد التحقق</button></div>` : ""}
 
-      <div class="sec">
+      ${(!claims.some(c => c.matched) && ["found", "context_omitted"].includes(E.original_match?.status)) ? "" : `<div class="sec">
         <h3>${claims.some(c => c.kind === "quran") ? (claims.length > 1 ? `النصوص الواردة (${toAr(claims.length)})` : "الآية الواردة") : (claims.length > 1 ? `الأحاديث الواردة (${toAr(claims.length)})` : "الحديث الوارد")}</h3>
         ${claims.map(claimHTML).join("")}
-      </div>
+      </div>`}
+
+      ${originalHTML(E.original_match)}
 
       ${isMedia ? `
       <div class="sec">
         <h3>القرائن التقنية</h3>
         <ul class="evid">
+          ${E.provenance ? `<li><b>بيانات الملف والتوقيع</b><span class="d">${esc(E.provenance.label)}</span><span class="tag ${pv.cls}">${pv.tag}</span></li>` : ""}
           <li><b>أصالة الصوت</b><span class="d">${esc(E.authenticity?.label)}
             ${wave ? `<span class="wave" aria-hidden="true">${wave.map(h => `<i style="height:${4 + h * 26}px"></i>`).join("")}</span>` : ""}</span>
             <span class="tag ${a.cls}">${a.tag}</span></li>
@@ -825,7 +859,16 @@ function renderReport(d) {
 
 function replyText(d) {
   const lines = [`تحقق «بيّنة»: ${d.verdict_title}`, d.verdict_summary, ""];
+  const o = d.evidence?.original_match, hasOrig = o && ["found", "context_omitted"].includes(o.status);
+  if (hasOrig) {
+    const src = o.source || {};
+    lines.push(`الأصل: ${src.scholar || ""}${src.title ? "، " + src.title : ""}`);
+    lines.push(`في الأصل: …${o.before || ""} «${o.quoted || ""}» ${o.after || ""}…`);
+    if (src.url) lines.push(`الرابط: ${src.url}`);
+    lines.push("");
+  }
   for (const c of d.evidence?.content?.claims || []) {
+    if (!c.matched && hasOrig) continue;
     if (!c.matched) { lines.push(`النص: ${c.quoted_text}`, "لم يُعثر عليه في المصادر المتاحة، ويُحال إلى المختص.", ""); continue; }
     const h = c.hadith;
     if (c.kind === "quran") { lines.push(`الآية: ${h.text}`, `الموضع: ${h.source?.book || ""}، ${h.source?.ref || ""}`, ""); continue; }

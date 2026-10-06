@@ -5,28 +5,62 @@
     uvicorn app:app --reload --port 7860
 """
 
+import hashlib
+import json
+import logging
 import os
 import shutil
 import tempfile
 import time
 import uuid
+from collections import defaultdict, deque
 
-from fastapi import FastAPI, File, Form, UploadFile
+from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from audio import AudioError, authenticity, load_audio, transcribe
 import dorar
+import provenance
+from originals import OriginalsArchive
 from engine import HadithEngine
 from verdict import TITLES, content_block, decide
 
 MAX_MB = 50
 
+# حد الطلبات: يحمي الخدمة من الإغراق، ويصعّب على المزوّر تجربة تزييفه مرة بعد مرة حتى يمر
+RATE_LIMIT, RATE_WINDOW = 30, 600   # 30 طلباً كل 10 دقائق لكل مستخدم
+_hits = defaultdict(deque)
+
+# سجل التدقيق: نوع المدخل والنتيجة والزمن فقط، بلا محتوى ولا عنوان IP صريح
+audit = logging.getLogger("bayyinah.audit")
+if not audit.handlers:
+    _h = logging.StreamHandler()
+    _h.setFormatter(logging.Formatter("%(message)s"))
+    audit.addHandler(_h)
+    audit.setLevel(logging.INFO)
+
+
+def _client(request):
+    ip = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip() or (request.client.host if request.client else "")
+    return hashlib.sha256(("bayyinah:" + ip).encode()).hexdigest()[:12]
+
+
+def _allowed(who):
+    now, q = time.time(), _hits[who]
+    while q and now - q[0] > RATE_WINDOW:
+        q.popleft()
+    if len(q) >= RATE_LIMIT:
+        return False
+    q.append(now)
+    return True
+
 app = FastAPI(title="Bayyinah API", version="0.1")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 engine = HadithEngine()
+archive = OriginalsArchive()
 
 
 def download_audio(link):
@@ -71,11 +105,13 @@ NOT_APPLICABLE = {
     "speaker_match": {"status": "not_applicable", "label": "المدخل نص"},
     "original_match": {"status": "not_applicable", "label": "المدخل نص", "source": None, "before": None, "after": None},
     "authenticity": {"status": "not_applicable", "signal": None, "label": "المدخل نص، فلم يُجرَ الفحص التقني", "waveform": None},
+    "provenance": {"status": "not_applicable", "label": "المدخل نص، فلم تُفحص بيانات الملف"},
 }
 
 
 @app.post("/analyze")
 async def analyze(
+    request: Request,
     input_type: str = Form(...),
     kind: str = Form("auto"),
     file: UploadFile | None = File(None),
@@ -84,6 +120,9 @@ async def analyze(
     context: str | None = Form(None),
 ):
     t0 = time.time()
+    who = _client(request)
+    if not _allowed(who):
+        return error(429, "rate_limited", "تجاوزت عدد مرات التحقق المسموح خلال عشر دقائق، فانتظر قليلاً ثم أعد المحاولة.")
     input_type = (input_type or "").strip()
     if input_type not in ("audio", "video", "url", "text"):
         return error(400, "unsupported_format", "نوع المدخل غير مدعوم.")
@@ -100,10 +139,11 @@ async def analyze(
     # ---------- الرابط: نحاول نحمّل المقطع، وإذا منعت المنصة نعتمد على النص المكتوب ----------
     elif input_type == "url":
         link = (url or "").strip()
-        wav, folder = None, None
+        wav, folder, prov = None, None, None
         if link.startswith(("http://", "https://")):
             try:
                 path, folder = await run_in_threadpool(download_audio, link)
+                prov = provenance.inspect(path)
                 wav, duration = load_audio(path)
             except Exception:
                 wav = None
@@ -112,6 +152,7 @@ async def analyze(
                     shutil.rmtree(folder, ignore_errors=True)
         transcript = ""
         if wav is not None:
+            evidence["provenance"] = prov
             evidence["authenticity"] = authenticity(wav, duration)
             evidence.update({k: dict(v) for k, v in MEDIA_EVIDENCE.items()})
             try:
@@ -142,6 +183,7 @@ async def analyze(
         try:
             tmp.write(data)
             tmp.close()
+            evidence["provenance"] = provenance.inspect(tmp.name)
             wav, duration = load_audio(tmp.name)
         except AudioError as e:
             return error(422, e.code, e.message)
@@ -180,11 +222,23 @@ async def analyze(
             if found:
                 claims = [found]
                 break
+    # المطابقة مع الأصل: نبحث عن الكلام في الأرشيف التجريبي المنقول من المواقع الرسمية للعلماء
+    if len(archive):
+        om = archive.evidence(transcript)
+        if om["status"] == "not_found" and context and context.strip() and context.strip() != transcript:
+            alt = archive.evidence(context.strip())
+            if alt["status"] != "not_found":
+                om = alt
+        evidence["original_match"] = om
     evidence["content"] = content_block(claims)
-    verdict, summary, abstain, disclaimer = decide(evidence["content"], evidence["authenticity"], duration)
+    verdict, summary, abstain, disclaimer = decide(evidence["content"], evidence["authenticity"], duration, evidence.get("provenance"), evidence.get("original_match"))
 
+    request_id = uuid.uuid4().hex[:12]
+    audit.info(json.dumps({"t": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "id": request_id, "who": who,
+                           "input": input_type, "kind": kind, "verdict": verdict, "abstain": abstain,
+                           "ms": int((time.time() - t0) * 1000)}, ensure_ascii=False))
     return {
-        "request_id": uuid.uuid4().hex[:12],
+        "request_id": request_id,
         "input_type": input_type,
         "processing_ms": int((time.time() - t0) * 1000),
         "verdict": verdict,
